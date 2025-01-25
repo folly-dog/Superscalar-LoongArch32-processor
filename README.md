@@ -1,4 +1,4 @@
-# Superscalar-MIPS-processor
+# Superscalar-LoongArch32-processor
 
 a study program,  
 author is a student,  
