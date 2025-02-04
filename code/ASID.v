@@ -11,6 +11,6 @@ module ASID (
         if(!rst_n)
             ASID <= {8'b0, 8'b10, 6'b0, 10'b0};
         else if(ASID_wr_en)
-            ASID <= ASID_wr;
+            ASID[9:0] <= ASID_wr;
     end
 endmodule
