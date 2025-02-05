@@ -4,7 +4,7 @@ module  TLBELO0 (
 
     input               TLBRD_en,
     input       [27:8]  TLB_PPN_0,
-    input       [5:0]   TLB_flags_0,  // TLB flags，0~5:Valid至MAT   
+    input       [5:0]   TLB_flags_0,  // TLB flags, 5-4:MAT, 3-2:PLV, 1-0:MESI  
     input               TLB_G_0,      // TLB Global
 
     output  reg [31:0]  TLBELO0

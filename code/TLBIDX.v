@@ -2,8 +2,9 @@ module  TLBIDX (
     input               clk,
     input               rst_n,
 
+    input               TLBSRCH,
     input               TLBSRCH_hit,
-    input       [5:0]   TLB_hit_idx,
+    input       [5:0]   TLBSRCH_hit_idx,
     input               TLBRD_en,
     input       [5:0]   TLB_PS,     // Page size
     input               TLB_E,      // TLB Entry valid
@@ -14,12 +15,14 @@ module  TLBIDX (
         if(!rst_n)
             TLBIDX <= {1'b1, 31'b0};
         else begin
-            if(TLBSRCH_hit)begin
-                TLBIDX[5:0] <= TLB_hit_idx;
-                TLBIDX[31] <= 1'b0;
+            if(TLBSRCH)begin
+                if(TLBSRCH_hit)begin
+                    TLBIDX[5:0] <= TLBSRCH_hit_idx;
+                    TLBIDX[31] <= 1'b0;
+                end
+                else
+                    TLBIDX[31] <= 1'b1;
             end
-            else
-                TLBIDX[31] <= 1'b1;
             if(TLBRD_en)begin
                 TLBIDX[29:24] <= TLB_PS;
                 TLBIDX[31] <= ~TLB_E;
