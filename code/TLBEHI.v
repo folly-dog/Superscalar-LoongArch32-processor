@@ -2,7 +2,7 @@ module  TLBEHI (
     input               clk,
     input               rst_n,
 
-    input       [31:13] TLB_VPN,
+    input       [31:13] TLB_VPN_RD, // TLB VPN read
     input               TLBRD_en,
 
     input       [31:13] EXC_VPN,    // Exception VPN
@@ -15,7 +15,7 @@ module  TLBEHI (
             TLBEHI <= 32'b0;
         else begin
             if(TLBRD_en)
-                TLBEHI[31:13] <= TLB_VPN;
+                TLBEHI[31:13] <= TLB_VPN_RD;
             if(EXC_vld)
                 TLBEHI[31:13] <= EXC_VPN;
         end

@@ -3,7 +3,7 @@ module  TLBELO1 (
     input               rst_n,
 
     input               TLBRD_en,
-    input       [27:8]  TLB_PPN_1,
+    input       [27:8]  TLB_PPN_1_RD,
     input       [5:0]   TLB_flags_1,  // TLB flags, 5-4:MAT, 3-2:PLV, 1-0:MESI   
     input               TLB_G_1,      // TLB Global
 
