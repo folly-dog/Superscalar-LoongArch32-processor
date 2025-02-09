@@ -15,6 +15,7 @@ module  CRMD(
 
     output  reg [31:0]  CRMD
 );
+
     always @(posedge clk or negedge rst_n)begin
         if(!rst_n)
             CRMD <= 32'b0;
