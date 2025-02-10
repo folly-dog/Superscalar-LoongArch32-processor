@@ -11,7 +11,7 @@ module  PGDL(
         if(!rst_n)
             PGDL <= 32'b0;
         else if(CSRWR_PGDL_en)
-            PGDL[31:12] <= {CSRWR_PGDL_addr, 12'b0};
+            PGDL[31:12] <= CSRWR_PGDL_addr;
     end
 
 endmodule

@@ -1,12 +1,17 @@
-module  PGDH(
-    input               CSRRD_PGD_en,
-    input       [31:12] PGDL,
-    input       [31:12] PGDH,
-    input               BADV_high,
+module  PGDL(
+    input               clk,
+    input               rst_n,
 
-    output      [31:0]  PGD_rd
+    input               CSRWR_PGDH_en,
+    input       [31:12] CSRWR_PGDH_addr,  // 4KB对齐 
+
+    output  reg [31:0]  PGDH
 );
-
-    assign PGD_rd = CSRRD_PGD_en ? (BADV_high ? PGDH : PGDL) : 32'b0;
+    always @(posedge clk or negedge rst_n)begin
+        if(!rst_n)
+            PGDH <= 32'b0;
+        else if(CSRWR_PGDH_en)
+            PGDH[31:12] <= CSRWR_PGDH_addr;
+    end
 
 endmodule
