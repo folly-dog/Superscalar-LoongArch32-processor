@@ -4,8 +4,8 @@ module TLB (
 
     input        [31:12]    PC,
     input                   IF_stage_vld,
-    output       [31:12]    PC_PPN,
-    output                  TLB_hit,        // 1: PC_PPN有效, 0: TLB-miss
+    output reg   [31:12]    PC_PPN,
+    output reg              TLB_hit,        // 1: PC_PPN有效, 0: TLB-miss
 
     input                   TLBSRCH,
     input          [9:0]    ASID,
@@ -111,11 +111,22 @@ module TLB (
         end
     endgenerate
 
-    assign TLB_hit = |(TLB_hit_result);                                 // TLB_hit
+    always @(posedge clk or negedge rst_n) begin                        // TLB_hit
+        if(!rst_n)
+            TLB_hit <= 1'b0;
+        else 
+            TLB_hit <= |(TLB_hit_result); 
+    end
 
     assign PPN0_sel = TLB_PPN_0[onehot_to_index(TLB_hit_result)];       // PPN0_sel  
-    assign PPN1_sel = TLB_PPN_1[onehot_to_index(TLB_hit_result)];       // PPN0_sel    
-    assign PC_PPN = (PC[12]) ? PPN1_sel : PPN0_sel;                     // PC_PPN                                    
+    assign PPN1_sel = TLB_PPN_1[onehot_to_index(TLB_hit_result)];       // PPN0_sel   
+
+    always @(posedge clk or negedge rst_n) begin                        // PC_PPN
+        if(!rst_n)
+            PC_PPN <= 20'd0;
+        else if(TLB_hit)
+            PC_PPN <= (PC[12]) ? PPN1_sel : PPN0_sel;
+    end                            
 
     assign TLBSRCH_hit_result = ASID_hit_result & VPN_hit_result;
     assign TLBSRCH_hit = |(TLBSRCH_hit_result);                         // TLBSRCH_hit
