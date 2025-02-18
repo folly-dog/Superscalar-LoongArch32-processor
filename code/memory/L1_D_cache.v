@@ -19,7 +19,7 @@ module  D_cache(
     input        [1:0]  CACOP_op,   // 0, 1, 2
     input       [31:0]  CACOP_addr,
     input      [31:12]  CACOP_PPN,
-    output              CACOP_ack
+    output              CACOP_ack,
 
     output reg           D_cache_req,
     output               D_cache_req_op,        // 0: read, 1: write
@@ -36,26 +36,42 @@ module  D_cache(
     reg         vld_line0 [11:6];
     reg         dirty_line0 [11:6];
     reg [31:12] tag_line0 [11:6];
-    reg [63:0]    data0_line0 [11:6];       // 将512bit的data分为了8个64bit的BANK
-    reg [127:64]  data1_line0 [11:6];
-    reg [191:128] data2_line0 [11:6];
-    reg [255:192] data3_line0 [11:6];
-    reg [319:256] data4_line0 [11:6];   
-    reg [383:320] data5_line0 [11:6];
-    reg [447:384] data6_line0 [11:6];
-    reg [511:448] data7_line0 [11:6];
+    reg [31:0]    data0_line0 [11:6];       // 将512bit的data分为了16个32bit的BANK
+    reg [63:32]   data1_line0 [11:6];
+    reg [95:64]   data2_line0 [11:6];
+    reg [127:96]  data3_line0 [11:6];
+    reg [159:128] data4_line0 [11:6];   
+    reg [191:160] data5_line0 [11:6];
+    reg [223:192] data6_line0 [11:6];
+    reg [255:224] data7_line0 [11:6];
+    reg [287:256] data8_line0 [11:6];      
+    reg [319:288] data9_line0 [11:6];
+    reg [351:320] data10_line0 [11:6];
+    reg [383:352] data11_line0 [11:6];
+    reg [415:384] data12_line0 [11:6];   
+    reg [447:416] data13_line0 [11:6];
+    reg [479:448] data14_line0 [11:6];
+    reg [511:480] data15_line0 [11:6];
 
     reg         vld_line1 [11:6];
     reg         dirty_line1 [11:6];
     reg [31:12] tag_line1 [11:6];
-    reg [63:0]    data0_line1 [11:6];       // 将512bit的data分为了8个64bit的BANK
-    reg [127:64]  data1_line1 [11:6];
-    reg [191:128] data2_line1 [11:6];
-    reg [255:192] data3_line1 [11:6];
-    reg [319:256] data4_line1 [11:6];   
-    reg [383:320] data5_line1 [11:6];
-    reg [447:384] data6_line1 [11:6];
-    reg [511:448] data7_line1 [11:6];
+    reg [31:0]    data0_line1 [11:6];       // 将512bit的data分为了16个32bit的BANK
+    reg [63:32]   data1_line1 [11:6];
+    reg [95:64]   data2_line1 [11:6];
+    reg [127:96]  data3_line1 [11:6];
+    reg [159:128] data4_line1 [11:6];   
+    reg [191:160] data5_line1 [11:6];
+    reg [223:192] data6_line1 [11:6];
+    reg [255:224] data7_line1 [11:6];
+    reg [287:256] data8_line1 [11:6];      
+    reg [319:288] data9_line1 [11:6];
+    reg [351:320] data10_line1 [11:6];
+    reg [383:352] data11_line1 [11:6];
+    reg [415:384] data12_line1 [11:6];   
+    reg [447:416] data13_line1 [11:6];
+    reg [479:448] data14_line1 [11:6];
+    reg [511:480] data15_line1 [11:6];
 
     reg         vld_line0_rd;
     reg         dirty_line0_rd;
@@ -298,16 +314,28 @@ module  D_cache(
         end
     end
 
-    always @(posedge clk) begin
-        if((current_state == IDLE) && CACOP_req && (CACOP_op == 2'b00))begin
+    always @(posedge clk) begin         // tag
+        if((mode == 2'b11) && (next_state == IDLE) && (CACOP_op == 2'b00))begin
             if(CACOP_addr[0])
                 tag_line1[CACOP_addr[11:6]] <= 20'd0;
             else
                 tag_line0[CACOP_addr[11:6]] <= 20'd0; 
         end
+        else if((mode == 2'b10) && (next_state == IDLE))begin
+            if(idx_way_wr)
+                tag_line1[store_addr[11:6]] <= store_PPN;
+            else
+                tag_line0[store_addr[11:6]] <= store_PPN;
+        end
+        else if((mode == 2'b01) && (next_state == IDLE))begin
+            if(idx_way_wr)
+                tag_line1[load_addr[11:6]] <= load_PPN;
+            else
+                tag_line0[load_addr[11:6]] <= load_PPN;
+        end
     end
 
-    always @(posedge clk) begin
+    always @(posedge clk) begin         // vld
         if((current_state == IDLE) && CACOP_req && (CACOP_op == 2'b01))begin
             if(CACOP_addr[0])
                 vld_line1[CACOP_addr[11:6]] <= 1'b0;
@@ -319,6 +347,98 @@ module  D_cache(
                 vld_line1[CACOP_addr[11:6]] <= 1'b0;
             if(CACOP_line0_hit)
                 vld_line0[CACOP_addr[11:6]] <= 1'b0;
+        end
+        else if((mode == 2'b10) && (next_state == IDLE))begin
+            if(idx_way_wr)
+                vld_line1[store_addr[11:6]] <= 1'b1;
+            else
+                vld_line0[store_addr[11:6]] <= 1'b1;
+        end
+        else if((mode == 2'b01) && (next_state == IDLE))begin
+            if(idx_way_wr)
+                vld_line1[load_addr[11:6]] <= 1'b1;
+            else
+                vld_line0[load_addr[11:6]] <= 1'b1;
+        end
+    end
+
+    always @(posedge clk) begin         // dirty
+        if(next_state == IDLE)begin
+            case (current_state)
+                store_mode,
+                wr_L2: begin
+                    if(idx_way_wr)
+                        dirty_line1[store_addr[11:6]] <= 1'b1;
+                    else
+                        dirty_line0[store_addr[11:6]] <= 1'b1;
+                end
+                rd_L2: begin
+                    if(idx_way_wr)
+                        dirty_line1[store_addr[11:6]] <= 1'b0;
+                    else
+                        dirty_line0[store_addr[11:6]] <= 1'b0;
+                end
+            endcase
+        end
+    end
+
+    always @(posedge clk) begin         // data
+        if(next_state == IDLE)begin
+            case (current_state)
+                store_mode,
+                wr_L2: begin
+                    if(idx_way_wr)
+                        case (store_addr[5:2])
+                            4'b0000: data0_line1[store_addr[11:6]] <= store_data;
+                            4'b0001: data1_line1[store_addr[11:6]] <= store_data;
+                            4'b0010: data2_line1[store_addr[11:6]] <= store_data;
+                            4'b0011: data3_line1[store_addr[11:6]] <= store_data;
+                            4'b0100: data4_line1[store_addr[11:6]] <= store_data;
+                            4'b0101: data5_line1[store_addr[11:6]] <= store_data;
+                            4'b0110: data6_line1[store_addr[11:6]] <= store_data;
+                            4'b0111: data7_line1[store_addr[11:6]] <= store_data;
+                            4'b1000: data8_line1[store_addr[11:6]] <= store_data;
+                            4'b1001: data9_line1[store_addr[11:6]] <= store_data;
+                            4'b1010: data10_line1[store_addr[11:6]] <= store_data;
+                            4'b1011: data11_line1[store_addr[11:6]] <= store_data;
+                            4'b1100: data12_line1[store_addr[11:6]] <= store_data;
+                            4'b1101: data13_line1[store_addr[11:6]] <= store_data;
+                            4'b1110: data14_line1[store_addr[11:6]] <= store_data;
+                            4'b1111: data15_line1[store_addr[11:6]] <= store_data;
+                        endcase
+                    else
+                        case (store_addr[5:2])
+                            4'b0000: data0_line0[store_addr[11:6]] <= store_data;
+                            4'b0001: data1_line0[store_addr[11:6]] <= store_data;
+                            4'b0010: data2_line0[store_addr[11:6]] <= store_data;
+                            4'b0011: data3_line0[store_addr[11:6]]<= store_data;
+                            4'b0100: data4_line0[store_addr[11:6]] <= store_data;
+                            4'b0101: data5_line0[store_addr[11:6]] <= store_data;
+                            4'b0110: data6_line0[store_addr[11:6]] <= store_data;
+                            4'b0111: data7_line0[store_addr[11:6]] <= store_data;
+                            4'b1000: data8_line0[store_addr[11:6]] <= store_data;
+                            4'b1001: data9_line0[store_addr[11:6]] <= store_data;
+                            4'b1010: data10_line0[store_addr[11:6]] <= store_data;
+                            4'b1011: data11_line0[store_addr[11:6]] <= store_data;
+                            4'b1100: data12_line0[store_addr[11:6]] <= store_data;
+                            4'b1101: data13_line0[store_addr[11:6]] <= store_data;
+                            4'b1110: data14_line0[store_addr[11:6]] <= store_data;
+                            4'b1111: data15_line0[store_addr[11:6]] <= store_data;
+                        endcase
+                end
+                rd_L2: begin
+                    if(idx_way_wr)
+                        {data15_line1[load_addr[11:6]], data14_line1[load_addr[11:6]], data13_line1[load_addr[11:6]], data12_line1[load_addr[11:6]],
+                         data11_line1[load_addr[11:6]], data10_line1[load_addr[11:6]], data9_line1[load_addr[11:6]],  data8_line1[load_addr[11:6]],
+                         data7_line1[load_addr[11:6]],  data6_line1[load_addr[11:6]],  data5_line1[load_addr[11:6]],  data4_line1[load_addr[11:6]],
+                         data3_line1[load_addr[11:6]],  data2_line1[load_addr[11:6]],  data1_line1[load_addr[11:6]],  data0_line1[load_addr[11:6]]} <= D_cache_rd_data;
+                    else
+                        {data15_line0[load_addr[11:6]], data14_line0[load_addr[11:6]], data13_line0[load_addr[11:6]], data12_line0[load_addr[11:6]],
+                         data11_line0[load_addr[11:6]], data10_line0[load_addr[11:6]], data9_line0[load_addr[11:6]],  data8_line0[load_addr[11:6]],
+                         data7_line0[load_addr[11:6]],  data6_line0[load_addr[11:6]],  data5_line0[load_addr[11:6]],  data4_line0[load_addr[11:6]],
+                         data3_line0[load_addr[11:6]],  data2_line0[load_addr[11:6]],  data1_line0[load_addr[11:6]],  data0_line0[load_addr[11:6]]} <= D_cache_rd_data;
+                end
+            endcase
         end
     end
 
@@ -336,28 +456,46 @@ module  D_cache(
         else begin
             if(((current_state == load_mode) && (next_state == IDLE)))begin
                 if(load_line0_hit)
-                    case (load_addr[5:3])
-                        3'b000: load_data <= data0_line0[load_addr[11:6]];
-                        3'b001: load_data <= data1_line0[load_addr[11:6]];
-                        3'b010: load_data <= data2_line0[load_addr[11:6]];
-                        3'b011: load_data <= data3_line0[load_addr[11:6]];
-                        3'b100: load_data <= data4_line0[load_addr[11:6]];
-                        3'b101: load_data <= data5_line0[load_addr[11:6]];
-                        3'b110: load_data <= data6_line0[load_addr[11:6]];
-                        3'b111: load_data <= data7_line0[load_addr[11:6]];
+                    case (load_addr[5:2])
+                        4'b0000: load_data <= data0_line0[load_addr[11:6]];
+                        4'b0001: load_data <= data1_line0[load_addr[11:6]];
+                        4'b0010: load_data <= data2_line0[load_addr[11:6]];
+                        4'b0011: load_data <= data3_line0[load_addr[11:6]];
+                        4'b0100: load_data <= data4_line0[load_addr[11:6]];
+                        4'b0101: load_data <= data5_line0[load_addr[11:6]];
+                        4'b0110: load_data <= data6_line0[load_addr[11:6]];
+                        4'b0111: load_data <= data7_line0[load_addr[11:6]];
+                        4'b1000: load_data <= data8_line0[load_addr[11:6]];
+                        4'b1001: load_data <= data9_line0[load_addr[11:6]];
+                        4'b1010: load_data <= data10_line0[load_addr[11:6]];
+                        4'b1011: load_data <= data11_line0[load_addr[11:6]];
+                        4'b1100: load_data <= data12_line0[load_addr[11:6]];
+                        4'b1101: load_data <= data13_line0[load_addr[11:6]];
+                        4'b1110: load_data <= data14_line0[load_addr[11:6]];
+                        4'b1111: load_data <= data15_line0[load_addr[11:6]];
                     endcase
                 else
-                    case (load_addr[5:3])
-                        3'b000: load_data <= data0_line1[load_addr[11:6]];
-                        3'b001: load_data <= data1_line1[load_addr[11:6]];
-                        3'b010: load_data <= data2_line1[load_addr[11:6]];
-                        3'b011: load_data <= data3_line1[load_addr[11:6]];
-                        3'b100: load_data <= data4_line1[load_addr[11:6]];
-                        3'b101: load_data <= data5_line1[load_addr[11:6]];
-                        3'b110: load_data <= data6_line1[load_addr[11:6]];
-                        3'b111: load_data <= data7_line1[load_addr[11:6]];
+                    case (load_addr[5:2])
+                        4'b0000: load_data <= data0_line1[load_addr[11:6]];
+                        4'b0001: load_data <= data1_line1[load_addr[11:6]];
+                        4'b0010: load_data <= data2_line1[load_addr[11:6]];
+                        4'b0011: load_data <= data3_line1[load_addr[11:6]];
+                        4'b0100: load_data <= data4_line1[load_addr[11:6]];
+                        4'b0101: load_data <= data5_line1[load_addr[11:6]];
+                        4'b0110: load_data <= data6_line1[load_addr[11:6]];
+                        4'b0111: load_data <= data7_line1[load_addr[11:6]];
+                        4'b1000: load_data <= data8_line1[load_addr[11:6]];
+                        4'b1001: load_data <= data9_line1[load_addr[11:6]];
+                        4'b1010: load_data <= data10_line1[load_addr[11:6]];
+                        4'b1011: load_data <= data11_line1[load_addr[11:6]];
+                        4'b1100: load_data <= data12_line1[load_addr[11:6]];
+                        4'b1101: load_data <= data13_line1[load_addr[11:6]];
+                        4'b1110: load_data <= data14_line1[load_addr[11:6]];
+                        4'b1111: load_data <= data15_line1[load_addr[11:6]];
                     endcase
             end
+            else if(((current_state == rd_L2) && (next_state == IDLE)))
+                load_data <= D_cache_rd_data[load_addr[5:2]+: 32];
         end
     end
 
@@ -392,10 +530,14 @@ module  D_cache(
             D_cache_wr_data <= 512'd0;
         else if(next_state == wr_L2)
             if(idx_way_wr)
-                D_cache_wr_data <= {data7_line1[addr_choose], data6_line1[addr_choose], data5_line1[addr_choose], data4_line1[addr_choose],
+                D_cache_wr_data <= {data15_line1[addr_choose], data14_line1[addr_choose], data13_line1[addr_choose], data12_line1[addr_choose],
+                                    data11_line1[addr_choose], data10_line1[addr_choose], data9_line1[addr_choose], data8_line1[addr_choose],
+                                    data7_line1[addr_choose], data6_line1[addr_choose], data5_line1[addr_choose], data4_line1[addr_choose],
                                     data3_line1[addr_choose], data2_line1[addr_choose], data1_line1[addr_choose], data0_line1[addr_choose]};
             else
-                D_cache_wr_data <= {data7_line0[addr_choose], data6_line0[addr_choose], data5_line0[addr_choose], data4_line0[addr_choose],
+                D_cache_wr_data <= {data15_line0[addr_choose], data14_line0[addr_choose], data13_line0[addr_choose], data12_line0[addr_choose],
+                                    data11_line0[addr_choose], data10_line0[addr_choose], data9_line0[addr_choose], data8_line0[addr_choose],
+                                    data7_line0[addr_choose], data6_line0[addr_choose], data5_line0[addr_choose], data4_line0[addr_choose],
                                     data3_line0[addr_choose], data2_line0[addr_choose], data1_line0[addr_choose], data0_line0[addr_choose]};
     end
 
