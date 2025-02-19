@@ -17,6 +17,11 @@ module I_cache (
     input        [31:0]  CACOP_VA,
     input         [4:3]  CACOP_op,      // 0: tag_initial, 1: coherence_direct, 2: coherence_load
 
+    input                instruction0_vld_stage0,
+    input                instruction1_vld_stage0,
+    input                instruction2_vld_stage0,
+    input                instruction3_vld_stage0,
+
     output  reg  [31:0]  PC_stage2,
     output  reg   [1:0]  except_stage2,
 
@@ -173,8 +178,9 @@ module I_cache (
                 except_stage1 <= 1'b0;
             else if(hold_stage1_2)
                 except_stage1 <= except_stage1;
-            else if(stage1_pause)
+            else if(stage1_pause && (next_state != cacop_mode))begin
                 except_stage1 <= except_stage1;
+            end
             else if(except_stage0)
                 except_stage1 <= 1'b1;
             else
@@ -216,9 +222,9 @@ module I_cache (
                 vld_line0_stage1 <= vld_line0_stage1;
             else if(except_stage0)
                 vld_line0_stage1 <= 1'b0;
-            else if(stage1_pause)
-                vld_line0_stage1 <= 1'b0;
-            else if(IF_PC_vld && (IF_PC[3:2] == 2'b00))
+            else if(stage1_pause && (next_state != cacop_mode))
+                vld_line0_stage1 <= vld_line0_stage1;
+            else if(IF_PC_vld)
                 vld_line0_stage1 <= vld_line0[IF_PC[11:6]];
             else
                 vld_line0_stage1 <= 1'b0;
@@ -235,9 +241,9 @@ module I_cache (
                 vld_line1_stage1 <= vld_line1_stage1;
             else if(except_stage0)
                 vld_line1_stage1 <= 1'b0;
-            else if(stage1_pause)
-                vld_line1_stage1 <= 1'b0;
-            else if(IF_PC_vld && (IF_PC[3:2] < 2'b10))
+            else if(stage1_pause && (next_state != cacop_mode))
+                vld_line1_stage1 <= vld_line1_stage1;
+            else if(IF_PC_vld)
                 vld_line1_stage1 <= vld_line1[IF_PC[11:6]];
             else
                 vld_line1_stage1 <= 1'b0;
@@ -254,9 +260,9 @@ module I_cache (
                 vld_line2_stage1 <= vld_line2_stage1;
             else if(except_stage0)
                 vld_line2_stage1 <= 1'b0;
-            else if(stage1_pause)
-                vld_line2_stage1 <= 1'b0;
-            else if(IF_PC_vld && (IF_PC[3:2] < 2'b11))
+            else if(stage1_pause && (next_state != cacop_mode))
+                vld_line2_stage1 <= vld_line2_stage1;
+            else if(IF_PC_vld)
                 vld_line2_stage1 <= vld_line2[IF_PC[11:6]];
             else
                 vld_line2_stage1 <= 1'b0;
@@ -274,7 +280,7 @@ module I_cache (
             else if(except_stage0)
                 vld_line3_stage1 <= 1'b0;
             else if(stage1_pause)
-                vld_line3_stage1 <= 1'b0;
+                vld_line0_stage1 <= vld_line0_stage1;
             else if(IF_PC_vld)
                 vld_line3_stage1 <= vld_line3[IF_PC[11:6]];
             else
@@ -286,7 +292,7 @@ module I_cache (
         if(!rst_n)
             tag_line0_stage1 <= 20'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage0) && (!stage1_pause) 
-                                  && (IF_PC_vld && (IF_PC[3:2] == 2'b00)))
+                                  && (IF_PC_vld))
                 tag_line0_stage1 <= tag_line0[IF_PC[11:6]];
     end
 
@@ -294,7 +300,7 @@ module I_cache (
         if(!rst_n)
             tag_line1_stage1 <= 20'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage0) && (!stage1_pause) 
-                                  && (IF_PC_vld && (IF_PC[3:2] < 2'b10)))
+                                  && (IF_PC_vld))
                 tag_line1_stage1 <= tag_line1[IF_PC[11:6]];
     end
     
@@ -302,7 +308,7 @@ module I_cache (
         if(!rst_n)
             tag_line2_stage1 <= 20'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage0) && (!stage1_pause) 
-                                  && (IF_PC_vld && (IF_PC[3:2] < 2'b11)))
+                                  && (IF_PC_vld))
                 tag_line2_stage1 <= tag_line2[IF_PC[11:6]];
     end
 
@@ -324,9 +330,9 @@ module I_cache (
                 instruction0_vld <= instruction0_vld;
             else if(except_stage1 || except_TLB)
                 instruction0_vld <= 1'b0;
-            else if(IF_hit && (IF_PC[3:2] == 2'b00))
+            else if(IF_hit && instruction0_vld_stage0)
                 instruction0_vld <= 1'b1;
-            else if(L2_cache_ack_I_cache && (IF_PC[3:2] == 2'b00))
+            else if(L2_cache_ack_I_cache && instruction0_vld_stage0)
                 vld_line0_stage1 <= 1'b1;
             else
                 instruction0_vld <= 1'b0;
@@ -343,9 +349,9 @@ module I_cache (
                 instruction1_vld <= instruction1_vld;
             else if(except_stage1 || except_TLB)
                 instruction1_vld <= 1'b0;
-            else if(IF_hit && (IF_PC[3:2] < 2'b10))
+            else if(IF_hit && instruction1_vld_stage0)
                 instruction1_vld <= 1'b1;
-            else if(L2_cache_ack_I_cache && (IF_PC[3:2] < 2'b10))
+            else if(L2_cache_ack_I_cache && instruction1_vld_stage0)
                 vld_line0_stage1 <= 1'b1;
             else
                 instruction1_vld <= 1'b0;
@@ -362,9 +368,9 @@ module I_cache (
                 instruction2_vld <= instruction2_vld;
             else if(except_stage1 || except_TLB)
                 instruction2_vld <= 1'b0;
-            else if(IF_hit && (IF_PC[3:2] < 2'b11))
+            else if(IF_hit && instruction2_vld_stage0)
                 instruction2_vld <= 1'b1;
-            else if(L2_cache_ack_I_cache && (IF_PC[3:2] < 2'b11))
+            else if(L2_cache_ack_I_cache && instruction2_vld_stage0)
                 vld_line0_stage1 <= 1'b1;
             else
                 instruction2_vld <= 1'b0;
@@ -381,9 +387,9 @@ module I_cache (
                 instruction3_vld <= instruction3_vld;
             else if(except_stage1 || except_TLB)
                 instruction3_vld <= 1'b0;
-            else if(IF_hit)
+            else if(IF_hit && instruction3_vld_stage0)
                 instruction3_vld <= 1'b1;
-            else if(L2_cache_ack_I_cache)
+            else if(L2_cache_ack_I_cache && instruction3_vld_stage0)
                 vld_line0_stage1 <= 1'b1;
             else
                 instruction3_vld <= 1'b0;
@@ -424,6 +430,7 @@ module I_cache (
                     2'b10: instructions_ready = data2_line3[PC_stage1[11:6]];
                     2'b11: instructions_ready = data3_line3[PC_stage1[11:6]];
                 endcase
+                default: instructions_ready = 128'd0;
             endcase
     end
 
@@ -431,7 +438,7 @@ module I_cache (
         if(!rst_n)
             instruction0 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB) &&
-                                     (IF_hit && (PC_stage1[3:2] == 2'b00)))
+                                ((IF_hit || L2_cache_ack_I_cache) && instruction0_vld_stage0))
             instruction0 <= instructions_ready[31:0];
     end
 
@@ -439,7 +446,7 @@ module I_cache (
         if(!rst_n)
             instruction1 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB) &&
-                                     (IF_hit && (PC_stage1[3:2] < 2'b10)))
+                                ((IF_hit || L2_cache_ack_I_cache) && instruction1_vld_stage0))
             instruction1 <= instructions_ready[63:32];
     end
 
@@ -447,7 +454,7 @@ module I_cache (
         if(!rst_n)
             instruction2 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB) &&
-                                     (IF_hit && (PC_stage1[3:2] < 2'b11)))
+                                ((IF_hit || L2_cache_ack_I_cache) && instruction2_vld_stage0))
             instruction2 <= instructions_ready[95:64];
     end
 
@@ -455,7 +462,7 @@ module I_cache (
         if(!rst_n)
             instruction3 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB) &&
-                                     (IF_hit))
+                                ((IF_hit || L2_cache_ack_I_cache) && instruction3_vld_stage0))
             instruction3 <= instructions_ready[127:96];
     end
 
