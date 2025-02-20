@@ -25,14 +25,23 @@ module I_cache (
     output  reg  [31:0]  PC_stage2,
     output  reg   [1:0]  except_stage2,
 
+    input        [31:0]  PC_target_stage1,
+
     output  reg          instruction0_vld,
     output  reg  [31:0]  instruction0,
+    output  reg  [31:0]  PC_target_instruction0,
+
     output  reg          instruction1_vld,
     output  reg  [31:0]  instruction1,
+    output  reg  [31:0]  PC_target_instruction1,
+
     output  reg          instruction2_vld,
     output  reg  [31:0]  instruction2,
+    output  reg  [31:0]  PC_target_instruction2,
+
     output  reg          instruction3_vld,
     output  reg  [31:0]  instruction3,
+    output  reg  [31:0]  PC_target_instruction3,
 
     output               I_cache_req,
     output               I_cache_req_op,        // 0: read
@@ -94,6 +103,11 @@ module I_cache (
     reg [31:12] tag_line3_CACOP;
 
     reg [1:0]   cnt_cycle;  //用于循环计数，挑选替代的cacheline
+
+    reg  instruction0_vld_stage1;
+    reg  instruction1_vld_stage1;
+    reg  instruction2_vld_stage1;
+    reg  instruction3_vld_stage1;
 
     wire line0_hit;
     wire line1_hit;
@@ -279,8 +293,8 @@ module I_cache (
                 vld_line3_stage1 <= vld_line3_stage1;
             else if(except_stage0)
                 vld_line3_stage1 <= 1'b0;
-            else if(stage1_pause)
-                vld_line0_stage1 <= vld_line0_stage1;
+            else if(stage1_pause && (next_state != cacop_mode))
+                vld_line3_stage1 <= vld_line3_stage1;
             else if(IF_PC_vld)
                 vld_line3_stage1 <= vld_line3[IF_PC[11:6]];
             else
@@ -320,6 +334,82 @@ module I_cache (
                 tag_line3_stage1 <= tag_line3[IF_PC[11:6]];
     end
 
+    always @(posedge clk or negedge rst_n) begin        //instruction0_vld_stage1
+        if(!rst_n)
+            instruction0_vld_stage1 <= 1'b0;
+        else begin
+            if(flush_stage1_2)
+                instruction0_vld_stage1 <= 1'b0;
+            else if(hold_stage1_2)
+                instruction0_vld_stage1 <= instruction0_vld_stage1;
+            else if(except_stage0)
+                instruction0_vld_stage1 <= 1'b0;
+            else if(stage1_pause && (next_state != cacop_mode))
+                instruction0_vld_stage1 <= instruction0_vld_stage1;
+            else if(IF_PC_vld)
+                instruction0_vld_stage1 <= instruction0_vld_stage0;
+            else
+                instruction0_vld_stage1 <= 1'b0;
+        end
+    end
+
+    always @(posedge clk or negedge rst_n) begin        //instruction1_vld_stage1
+        if(!rst_n)
+            instruction1_vld_stage1 <= 1'b0;
+        else begin
+            if(flush_stage1_2)
+                instruction1_vld_stage1 <= 1'b0;
+            else if(hold_stage1_2)
+                instruction1_vld_stage1 <= instruction1_vld_stage1;
+            else if(except_stage0)
+                instruction1_vld_stage1 <= 1'b0;
+            else if(stage1_pause && (next_state != cacop_mode))
+                instruction1_vld_stage1 <= instruction1_vld_stage1;
+            else if(IF_PC_vld)
+                instruction1_vld_stage1 <= instruction1_vld_stage0;
+            else
+                instruction1_vld_stage1 <= 1'b0;
+        end
+    end
+
+    always @(posedge clk or negedge rst_n) begin        //instruction2_vld_stage1
+        if(!rst_n)
+            instruction2_vld_stage1 <= 1'b0;
+        else begin
+            if(flush_stage1_2)
+                instruction2_vld_stage1 <= 1'b0;
+            else if(hold_stage1_2)
+                instruction2_vld_stage1 <= instruction2_vld_stage1;
+            else if(except_stage0)
+                instruction2_vld_stage1 <= 1'b0;
+            else if(stage1_pause && (next_state != cacop_mode))
+                instruction2_vld_stage1 <= instruction2_vld_stage1;
+            else if(IF_PC_vld)
+                instruction2_vld_stage1 <= instruction2_vld_stage0;
+            else
+                instruction2_vld_stage1 <= 1'b0;
+        end
+    end
+
+    always @(posedge clk or negedge rst_n) begin        //instruction3_vld_stage1
+        if(!rst_n)
+            instruction3_vld_stage1 <= 1'b0;
+        else begin
+            if(flush_stage1_2)
+                instruction3_vld_stage1 <= 1'b0;
+            else if(hold_stage1_2)
+                instruction3_vld_stage1 <= instruction3_vld_stage1;
+            else if(except_stage0)
+                instruction3_vld_stage1 <= 1'b0;
+            else if(stage1_pause && (next_state != cacop_mode))
+                instruction3_vld_stage1 <= instruction3_vld_stage1;
+            else if(IF_PC_vld)
+                instruction3_vld_stage1 <= instruction3_vld_stage0;
+            else
+                instruction3_vld_stage1 <= 1'b0;
+        end
+    end
+
     always @(posedge clk or negedge rst_n) begin        //instruction0_vld
         if(!rst_n)
             instruction0_vld <= 1'b0;
@@ -330,9 +420,9 @@ module I_cache (
                 instruction0_vld <= instruction0_vld;
             else if(except_stage1 || except_TLB)
                 instruction0_vld <= 1'b0;
-            else if(IF_hit && instruction0_vld_stage0)
+            else if(IF_hit && instruction0_vld_stage1)
                 instruction0_vld <= 1'b1;
-            else if(L2_cache_ack_I_cache && instruction0_vld_stage0)
+            else if(L2_cache_ack_I_cache && instruction0_vld_stage1)
                 vld_line0_stage1 <= 1'b1;
             else
                 instruction0_vld <= 1'b0;
@@ -349,9 +439,9 @@ module I_cache (
                 instruction1_vld <= instruction1_vld;
             else if(except_stage1 || except_TLB)
                 instruction1_vld <= 1'b0;
-            else if(IF_hit && instruction1_vld_stage0)
+            else if(IF_hit && instruction1_vld_stage1)
                 instruction1_vld <= 1'b1;
-            else if(L2_cache_ack_I_cache && instruction1_vld_stage0)
+            else if(L2_cache_ack_I_cache && instruction1_vld_stage1)
                 vld_line0_stage1 <= 1'b1;
             else
                 instruction1_vld <= 1'b0;
@@ -368,9 +458,9 @@ module I_cache (
                 instruction2_vld <= instruction2_vld;
             else if(except_stage1 || except_TLB)
                 instruction2_vld <= 1'b0;
-            else if(IF_hit && instruction2_vld_stage0)
+            else if(IF_hit && instruction2_vld_stage1)
                 instruction2_vld <= 1'b1;
-            else if(L2_cache_ack_I_cache && instruction2_vld_stage0)
+            else if(L2_cache_ack_I_cache && instruction2_vld_stage1)
                 vld_line0_stage1 <= 1'b1;
             else
                 instruction2_vld <= 1'b0;
@@ -387,9 +477,9 @@ module I_cache (
                 instruction3_vld <= instruction3_vld;
             else if(except_stage1 || except_TLB)
                 instruction3_vld <= 1'b0;
-            else if(IF_hit && instruction3_vld_stage0)
+            else if(IF_hit && instruction3_vld_stage1)
                 instruction3_vld <= 1'b1;
-            else if(L2_cache_ack_I_cache && instruction3_vld_stage0)
+            else if(L2_cache_ack_I_cache && instruction3_vld_stage1)
                 vld_line0_stage1 <= 1'b1;
             else
                 instruction3_vld <= 1'b0;
@@ -434,11 +524,59 @@ module I_cache (
             endcase
     end
 
+    always @(posedge clk or negedge rst_n) begin        // PC_target_instruction0
+        if(!rst_n)
+            PC_target_instruction0 <= 32'd0;
+        else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB))begin
+            if(instruction0_vld_stage1)begin
+                if(instruction1_vld_stage1)
+                    PC_target_instruction0 <=  {PC_stage1[31:4], 4'b0100};
+                else
+                    PC_target_instruction0 <= PC_target_stage1;
+            end
+        end
+    end
+
+    always @(posedge clk or negedge rst_n) begin        // PC_target_instruction1
+        if(!rst_n)
+            PC_target_instruction1 <= 32'd0;
+        else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB))begin
+            if(instruction1_vld_stage1)begin
+                if(instruction2_vld_stage1)
+                    PC_target_instruction1 <=  {PC_stage1[31:4], 4'b1000};
+                else
+                    PC_target_instruction1 <= PC_target_stage1;
+            end
+        end
+    end
+
+    always @(posedge clk or negedge rst_n) begin        // PC_target_instruction2
+        if(!rst_n)
+            PC_target_instruction2 <= 32'd0;
+        else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB))begin
+            if(instruction2_vld_stage1)begin
+                if(instruction3_vld_stage1)
+                    PC_target_instruction2 <=  {PC_stage1[31:4], 4'b1100};
+                else
+                    PC_target_instruction2 <= PC_target_stage1;
+            end
+        end
+    end
+
+    always @(posedge clk or negedge rst_n) begin        // PC_target_instruction3
+        if(!rst_n)
+            PC_target_instruction3 <= 32'd0;
+        else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB))begin
+            if(instruction3_vld_stage1)
+                PC_target_instruction3 <= PC_target_stage1;
+        end
+    end
+
     always @(posedge clk or negedge rst_n) begin        //instruction0
         if(!rst_n)
             instruction0 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB) &&
-                                ((IF_hit || L2_cache_ack_I_cache) && instruction0_vld_stage0))
+                                ((IF_hit || L2_cache_ack_I_cache) && instruction0_vld_stage1))
             instruction0 <= instructions_ready[31:0];
     end
 
@@ -446,7 +584,7 @@ module I_cache (
         if(!rst_n)
             instruction1 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB) &&
-                                ((IF_hit || L2_cache_ack_I_cache) && instruction1_vld_stage0))
+                                ((IF_hit || L2_cache_ack_I_cache) && instruction1_vld_stage1))
             instruction1 <= instructions_ready[63:32];
     end
 
@@ -454,7 +592,7 @@ module I_cache (
         if(!rst_n)
             instruction2 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB) &&
-                                ((IF_hit || L2_cache_ack_I_cache) && instruction2_vld_stage0))
+                                ((IF_hit || L2_cache_ack_I_cache) && instruction2_vld_stage1))
             instruction2 <= instructions_ready[95:64];
     end
 
@@ -462,7 +600,7 @@ module I_cache (
         if(!rst_n)
             instruction3 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && (!except_stage1) && (!except_TLB) &&
-                                ((IF_hit || L2_cache_ack_I_cache) && instruction3_vld_stage0))
+                                ((IF_hit || L2_cache_ack_I_cache) && instruction3_vld_stage1))
             instruction3 <= instructions_ready[127:96];
     end
 

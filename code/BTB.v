@@ -2,13 +2,14 @@ module BTB (
     input               clk,
     input               rst_n,
 
+    input               PC_vld,
     input       [31:0]  PC,
 
     input               retire_en,
     input       [31:0]  PC_retire,
     input       [31:0]  PC_target_retire,
 
-    input               stage1_hold,
+    input               hold_stage1_2,
 
     output  reg [31:0]  PC_target,
     output  reg [31:0]  PC_target_stage1,
@@ -31,8 +32,8 @@ module BTB (
     wire  BTB_hit_wr;
     integer i;
 
-    assign BTB_hit_wr = retire_en && (PC[31:11] == PC_retire[31:11]) && (PC[3:2] <= PC_retire[3:2]);
-    assign BTB_hit = BTB_vld[PC[10:4]] && (PC[31:11] == BTB_tag[PC[10:4]]) && (PC[3:2] <= BTB_offest[PC[10:4]]);
+    assign BTB_hit_wr = PC_vld && retire_en && (PC[31:11] == PC_retire[31:11]) && (PC[3:2] <= PC_retire[3:2]);
+    assign BTB_hit = PC_vld && BTB_vld[PC[10:4]] && (PC[31:11] == BTB_tag[PC[10:4]]) && (PC[3:2] <= BTB_offest[PC[10:4]]);
 
     always @(posedge clk or negedge rst_n) begin            // retire
         if(!rst_n)
@@ -62,7 +63,7 @@ module BTB (
     always @(posedge clk or negedge rst_n) begin        // PC_target_stage1
         if(!rst_n)
             PC_target_stage1 <= 32'd0;
-        else if(!stage1_hold) begin
+        else if(!hold_stage1_2) begin
             if(BTB_hit || BTB_hit_wr)
                 PC_target_stage1 <= PC_target;
             else
