@@ -489,7 +489,7 @@ module decode_0 (
             PC_stage3 <= 32'd0;
         else if((!flush_stage3) && ((!hold_stage3)) && 
                     (instruction_vld || (|except_stage2)))
-            PC_stage3 <= {PC_stage2[31:4], 2'b00, 2'b00};
+            PC_stage3 <= {PC_stage2[31:4], 2'b10, 2'b00};
     end
 
     always @(posedge clk or negedge rst_n) begin        // except_stage3

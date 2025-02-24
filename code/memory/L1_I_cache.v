@@ -23,7 +23,10 @@ module I_cache (
     input                instruction3_vld_stage0,
 
     output  reg  [31:0]  PC_stage2,
-    output  reg   [1:0]  except_stage2,
+    output  reg   [1:0]  except_inst0_stage2,
+    output  reg   [1:0]  except_inst1_stage2,
+    output  reg   [1:0]  except_inst2_stage2,
+    output  reg   [1:0]  except_inst3_stage2,
 
     input        [31:0]  PC_target_stage1,
 
@@ -207,23 +210,76 @@ module I_cache (
             PC_stage2 <= 32'd0;
         else if((!flush_stage1_2) && (!hold_stage1_2) && 
                       (stage1_vld || except_stage1 || except_TLB || L2_cache_ack_I_cache))
-            PC_stage1 <= PC_stage1;
+            PC_stage2 <= PC_stage1;
     end
         
 
-    always @(posedge clk or negedge rst_n) begin        // except_stage2
+    always @(posedge clk or negedge rst_n) begin        // except_inst0_stage2
         if(!rst_n)
-            except_stage2 <= 2'b0;
-        else begin
+            except_inst0_stage2 <= 2'b0;
+        else if(PC_stage1[3:2] == 2'b00)begin
             if(flush_stage1_2)
-                except_stage2 <= 2'b0;
+                except_inst0_stage2 <= 2'b0;
             else if(hold_stage1_2)
-                except_stage2 <= except_stage2;
+                except_inst0_stage2 <= except_inst0_stage2;
             else if(except_stage1 || except_TLB)
-                except_stage1 <= {except_TLB, except_stage1};
+                except_inst0_stage2 <= {except_TLB, except_stage1};
             else
-                except_stage1 <= 2'b0;
+                except_inst0_stage2 <= 2'b0;
         end
+        else
+            except_inst0_stage2 <= 2'b0;
+    end
+
+    always @(posedge clk or negedge rst_n) begin        // except_inst1_stage2
+        if(!rst_n)
+            except_inst1_stage2 <= 2'b0;
+        else if(PC_stage1[3:2] == 2'b01)begin
+            if(flush_stage1_2)
+                except_inst1_stage2 <= 2'b0;
+            else if(hold_stage1_2)
+                except_inst1_stage2 <= except_inst1_stage2;
+            else if(except_stage1 || except_TLB)
+                except_inst1_stage2 <= {except_TLB, except_stage1};
+            else
+                except_inst1_stage2 <= 2'b0;
+        end
+        else
+            except_inst1_stage2 <= 2'b0;
+    end
+
+    always @(posedge clk or negedge rst_n) begin        // except_inst2_stage2
+        if(!rst_n)
+            except_inst2_stage2 <= 2'b0;
+        else if(PC_stage1[3:2] == 2'b10)begin
+            if(flush_stage1_2)
+                except_inst2_stage2 <= 2'b0;
+            else if(hold_stage1_2)
+                except_inst2_stage2 <= except_inst2_stage2;
+            else if(except_stage1 || except_TLB)
+                except_inst2_stage2 <= {except_TLB, except_stage1};
+            else
+                except_inst2_stage2 <= 2'b0;
+        end
+        else
+            except_inst2_stage2 <= 2'b0;
+    end
+
+    always @(posedge clk or negedge rst_n) begin        // except_inst3_stage2
+        if(!rst_n)
+            except_inst3_stage2 <= 2'b0;
+        else if(PC_stage1[3:2] == 2'b11)begin
+            if(flush_stage1_2)
+                except_inst3_stage2 <= 2'b0;
+            else if(hold_stage1_2)
+                except_inst3_stage2 <= except_inst3_stage2;
+            else if(except_stage1 || except_TLB)
+                except_inst3_stage2 <= {except_TLB, except_stage1};
+            else
+                except_inst3_stage2 <= 2'b0;
+        end
+        else
+            except_inst3_stage2 <= 2'b0;
     end
 
     always @(posedge clk or negedge rst_n) begin        //vld_line0_stage1
