@@ -5,7 +5,7 @@ module  freelist(
     input               flush_stage4,
     input               stage4_pause,
 
-    input       [1:0]   PR_num_need,
+    input       [2:0]   PR_num_need,
     input       [1:0]   PR_num_wrback,
     input       [1:0]   AR_num_retire,
 
