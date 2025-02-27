@@ -419,14 +419,12 @@ module decode_0 (
     end
 
     always @(*) begin           // destina_reg_wire
-        if(instruction[31:10] == 22'b0000000000000000011000)
+        if(instruction[30:26] == 5'b10101)
+            destina_reg_wire = instruction[4:0];
+        else if (instruction[30:26] == 5'b10100) 
+            destina_reg_wire = 5'd1;
+        else
             destina_reg_wire = instruction[9:5];
-        else begin
-            if(instruction[31:26] == 6'b010101)    // BL
-                destina_reg_wire = 5'd1;
-            else
-                destina_reg_wire = instruction[4:0];
-        end
     end
 
     always @(*) begin           // source1_reg_en_wire
