@@ -499,10 +499,12 @@ module decode_0 (
             except_stage3 <= 3'd0;
         else if(hold_stage3)
             except_stage3 <= except_stage3;
-        else if(|except_stage2)
-            except_stage3 <= {1'b0, except_stage2};
-        else if(instruction_vld)
-            except_stage3 <= {!decode_vld_wire, 2'b00};
+        else if(PC_stage2[3:2] < 2'd2)begin
+            if(|except_stage2)
+                except_stage3 <= {1'b0, except_stage2};
+            else if(instruction_vld)
+                except_stage3 <= {!decode_vld_wire, 2'b00};
+        end
         else 
             except_stage3 <= 3'd0;
     end
