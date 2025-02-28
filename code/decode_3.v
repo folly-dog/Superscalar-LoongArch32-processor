@@ -338,8 +338,8 @@ module decode_0 (
 
     assign ALU0_imm_wire = instruction[28] ? instruction[24:5] : {8'd0, instruction[21:10]};
 
-    assign AGU_imm_wire = instruction[29] ? {3'd0, instruction[23:10]} : {instruction[4:0], instruction[21:10]};       // AGU_imm_wire
-
+    assign AGU_imm_wire = (instruction[29] || (!instruction[25])) ? {3'd0, instruction[23:10]} : {instruction[4:0], instruction[21:10]};       // AGU_imm_wire
+    
     always @(*) begin           // BRU_imm_wire
         if(IQ_choose_wire == 4'b0001)begin
             if(!instruction[30])
