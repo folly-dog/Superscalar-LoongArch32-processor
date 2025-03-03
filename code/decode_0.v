@@ -354,45 +354,45 @@ module decode_0 (
             BRU_imm_wire = 26'd0;
     end
 
-    always @(*) begin           // ROB_op
+    always @(*) begin           // ROB_op_wire
         if(BREAK)
-            ROB_op = 4'd1;  // break
+            ROB_op_wire = 4'd1;  // break
         else if(SYSCALL)
-            ROB_op = 4'd2;  // syscall
+            ROB_op_wire = 4'd2;  // syscall
         else 
             case (instruction[29:24])
-                6'b101001: ROB_op = (instruction[23:22] == 2'b11) ? 4'd0 : 4'd3;    // store类
+                6'b101001: ROB_op_wire = (instruction[23:22] == 2'b11) ? 4'd0 : 4'd3;    // store类
                 6'b000100: 
                     case (instruction[9:5])
-                        5'd0:   ROB_op = 4'd4;  // CSRRD
-                        5'd1:   ROB_op = 4'd5;  // CSRWR
-                        default: ROB_op = 4'd6; // CSRXCHG
+                        5'd0:   ROB_op_wire = 4'd4;  // CSRRD
+                        5'd1:   ROB_op_wire = 4'd5;  // CSRWR
+                        default: ROB_op_wire = 4'd6; // CSRXCHG
                     endcase
                 6'b000110:
                     case (instruction[23:22])
-                        2'b00: ROB_op = 4'd7;   // CACOP
+                        2'b00: ROB_op_wire = 4'd7;   // CACOP
                         2'b01:begin
                             if({instruction[21:13], instruction[9:0]} == 19'b0010000010000000000)
                                 case (instruction[12:10])
-                                    3'b010: ROB_op = 4'd8;   // TLBSRCH
-                                    3'b011: ROB_op = 4'd9;   // TLBRD
-                                    3'b100: ROB_op = 4'd10;   // TLBWR
-                                    3'b101: ROB_op = 4'd11;   // TLBFILL
-                                    3'b110: ROB_op = 4'd12;   // ERTN
-                                    default: ROB_op = 4'd0;
+                                    3'b010: ROB_op_wire = 4'd8;   // TLBSRCH
+                                    3'b011: ROB_op_wire = 4'd9;   // TLBRD
+                                    3'b100: ROB_op_wire = 4'd10;   // TLBWR
+                                    3'b101: ROB_op_wire = 4'd11;   // TLBFILL
+                                    3'b110: ROB_op_wire = 4'd12;   // ERTN
+                                    default: ROB_op_wire = 4'd0;
                                 endcase
                             else if(instruction[15])begin
                                 if(!instruction[16])
-                                    ROB_op = 4'd13;   // IDLE
+                                    ROB_op_wire = 4'd13;   // IDLE
                                 else
-                                    ROB_op = 4'd14;   // INVTLB
+                                    ROB_op_wire = 4'd14;   // INVTLB
                             end
                             else
-                                ROB_op = 4'd0;
+                                ROB_op_wire = 4'd0;
                         end
-                        default: ROB_op = 4'd0;
+                        default: ROB_op_wire = 4'd0;
                     endcase
-                default: ROB_op = 4'd0;
+                default: ROB_op_wire = 4'd0;
             endcase
     end
 
