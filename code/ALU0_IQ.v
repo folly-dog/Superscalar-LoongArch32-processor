@@ -56,8 +56,8 @@ module ALU0_IQ (
     input       [6:0]   dest_AGU,
     input       [6:0]   dest_BRU,
 
-    output              wr_pause,
-    input               ALU0_IQ_pause,
+    output              wr_ALU0_IQ_pause,
+    input               wr_pause,
 
     output  reg         ALU0_select_vld,
     output  reg [4:0]   ALU0_select_op,
@@ -99,7 +99,7 @@ module ALU0_IQ (
                        (!ALU0_IQ_vld[4]) + (!ALU0_IQ_vld[5]) + (!ALU0_IQ_vld[6]) + (!ALU0_IQ_vld[7]) +
                        (|grant_excute);
 
-    assign wr_pause = (room_need > room_have);
+    assign wr_ALU0_IQ_pause = (room_need > room_have);
 
     genvar i;
     generate
@@ -110,7 +110,7 @@ module ALU0_IQ (
         end
     endgenerate
 
-    assign grant_excute = ALU0_IQ_pause ? 8'd0 : 
+    assign grant_excute = wr_pause ? 8'd0 : 
                         (req_excute & ((~req_excute) + 1));
 
     assign converse_vld = {ALU0_IQ_vld[0], ALU0_IQ_vld[1], ALU0_IQ_vld[2], ALU0_IQ_vld[3], 
@@ -122,7 +122,7 @@ module ALU0_IQ (
     assign first_wr_onehot = (|grant_excute) ? last_vld : ((last_vld == 8'd0) ? 8'd1 : (last_vld << 1));
 
     always @(*) begin       // wr_en
-        if(ALU0_IQ_pause)
+        if(wr_pause)
             wr_en = 8'd0;
         else case (first_wr_onehot)
             8'b00000001: 
@@ -1173,7 +1173,7 @@ module ALU0_IQ (
             ALU0_IQ_source2[7] <= 7'd0;
             ALU0_IQ_op[7] <= 5'd0;
             ALU0_IQ_imm[7] <= 20'd0;
-            ALU0_IQ_ROB_ID[7] <= 20'd0;
+            ALU0_IQ_ROB_ID[7] <= 6'd0;
         end
         else begin
             if((ALU0_IQ_source1[7] == dest_ALU1) || (ALU0_IQ_source1[7] == dest_AGU) ||
