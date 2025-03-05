@@ -67,8 +67,8 @@ module  stage4_exclud_renmae(
     input       [25:0]  inst3_BRU_imm,
 
     output  reg         inst0_vld_stage4,
-    output  reg         inst0_PC_stage4,
-    output  reg         inst0_PC_target_stage4,
+    output  reg [31:0]  inst0_PC_stage4,
+    output  reg [31:0]  inst0_PC_target_stage4,
     output  reg [2:0]   inst0_except_stage4,
     output  reg [14:0]  inst0_except_code_stage4,
     output  reg [3:0]   inst0_IQ_choose_stage4,
@@ -82,8 +82,8 @@ module  stage4_exclud_renmae(
     output  reg [25:0]  inst0_BRU_imm_stage4,
 
     output  reg         inst1_vld_stage4,
-    output  reg         inst1_PC_stage4,
-    output  reg         inst1_PC_target_stage4,
+    output  reg [31:0]  inst1_PC_stage4,
+    output  reg [31:0]  inst1_PC_target_stage4,
     output  reg [2:0]   inst1_except_stage4,
     output  reg [14:0]  inst1_except_code_stage4,
     output  reg [3:0]   inst1_IQ_choose_stage4,
@@ -97,8 +97,8 @@ module  stage4_exclud_renmae(
     output  reg [25:0]  inst1_BRU_imm_stage4,
 
     output  reg         inst2_vld_stage4,
-    output  reg         inst2_PC_stage4,
-    output  reg         inst2_PC_target_stage4,
+    output  reg [31:0]  inst2_PC_stage4,
+    output  reg [31:0]  inst2_PC_target_stage4,
     output  reg [2:0]   inst2_except_stage4,
     output  reg [14:0]  inst2_except_code_stage4,
     output  reg [3:0]   inst2_IQ_choose_stage4,
@@ -112,8 +112,8 @@ module  stage4_exclud_renmae(
     output  reg [25:0]  inst2_BRU_imm_stage4,
 
     output  reg         inst3_vld_stage4,
-    output  reg         inst3_PC_stage4,
-    output  reg         inst3_PC_target_stage4,
+    output  reg [31:0]  inst3_PC_stage4,
+    output  reg [31:0]  inst3_PC_target_stage4,
     output  reg [2:0]   inst3_except_stage4,
     output  reg [14:0]  inst3_except_code_stage4,
     output  reg [3:0]   inst3_IQ_choose_stage4,

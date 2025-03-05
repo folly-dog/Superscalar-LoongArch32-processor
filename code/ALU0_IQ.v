@@ -105,8 +105,8 @@ module ALU0_IQ (
     generate
         for (i = 0; i < 8; i = i + 1) begin:get_req
             assign req_excute[i] = ALU0_IQ_vld[i] & 
-                        ((!ALU0_IQ_source1_en) | (ALU0_IQ_source1_en & ALU0_IQ_source1_rdy)) & 
-                        ((!ALU0_IQ_source2_en) | (ALU0_IQ_source2_en & ALU0_IQ_source2_rdy));
+                        ((!ALU0_IQ_source1_en[i]) | (ALU0_IQ_source1_en[i] & ALU0_IQ_source1_rdy[i])) & 
+                        ((!ALU0_IQ_source2_en[i]) | (ALU0_IQ_source2_en[i] & ALU0_IQ_source2_rdy[i]));
         end
     endgenerate
 
