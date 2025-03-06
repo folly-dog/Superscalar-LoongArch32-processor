@@ -83,7 +83,16 @@ module rename (
     output  reg [6:0]   inst0_source2_PR_stage4,
     output  reg [6:0]   inst1_source2_PR_stage4,
     output  reg [6:0]   inst2_source2_PR_stage4,
-    output  reg [6:0]   inst3_source2_PR_stage4
+    output  reg [6:0]   inst3_source2_PR_stage4,
+
+    output  reg         inst0_source1_en_stage4,
+    output  reg         inst1_source1_en_stage4,
+    output  reg         inst2_source1_en_stage4,
+    output  reg         inst3_source1_en_stage4,
+    output  reg         inst0_source2_en_stage4,
+    output  reg         inst1_source2_en_stage4,
+    output  reg         inst2_source2_en_stage4,
+    output  reg         inst3_source2_en_stage4
 );
     wire [6:0]  PR_idx_help;
     wire [6:0]  PR0_rd;
@@ -434,6 +443,88 @@ module rename (
             else
                 inst3_source2_PR_stage4 <= 7'd0;
         end
+    end
+
+    always @(posedge clk or negedge rst_n) begin    // inst0_source1_en_stage4
+        if(!rst_n || flush_stage4)
+            inst0_source1_en_stage4 <= 1'b0;
+        else if(hold_stage4)
+            inst0_source1_en_stage4 <= inst0_source1_en_stage4;
+        else if(decode0_vld)
+            inst0_source1_en_stage4 <= decode0_source1_vld;
+        else 
+            inst0_source1_en_stage4 <= 1'b0;
+    end
+    always @(posedge clk or negedge rst_n) begin    // inst1_source1_en_stage4
+        if(!rst_n || flush_stage4)
+            inst1_source1_en_stage4 <= 1'b0;
+        else if(hold_stage4)
+            inst1_source1_en_stage4 <= inst1_source1_en_stage4;
+        else if(decode0_vld)
+            inst1_source1_en_stage4 <= decode0_source1_vld;
+        else 
+            inst1_source1_en_stage4 <= 1'b0;
+    end
+    always @(posedge clk or negedge rst_n) begin    // inst2_source1_en_stage4
+        if(!rst_n || flush_stage4)
+            inst2_source1_en_stage4 <= 1'b0;
+        else if(hold_stage4)
+            inst2_source1_en_stage4 <= inst2_source1_en_stage4;
+        else if(decode0_vld)
+            inst2_source1_en_stage4 <= decode0_source1_vld;
+        else 
+            inst2_source1_en_stage4 <= 1'b0;
+    end
+    always @(posedge clk or negedge rst_n) begin    // inst3_source1_en_stage4
+        if(!rst_n || flush_stage4)
+            inst3_source1_en_stage4 <= 1'b0;
+        else if(hold_stage4)
+            inst3_source1_en_stage4 <= inst3_source1_en_stage4;
+        else if(decode0_vld)
+            inst3_source1_en_stage4 <= decode0_source1_vld;
+        else 
+            inst3_source1_en_stage4 <= 1'b0;
+    end
+
+    always @(posedge clk or negedge rst_n) begin    // inst0_source2_en_stage4
+        if(!rst_n || flush_stage4)
+            inst0_source2_en_stage4 <= 1'b0;
+        else if(hold_stage4)
+            inst0_source2_en_stage4 <= inst0_source2_en_stage4;
+        else if(decode0_vld)
+            inst0_source2_en_stage4 <= decode0_source2_vld;
+        else 
+            inst0_source2_en_stage4 <= 1'b0;
+    end
+    always @(posedge clk or negedge rst_n) begin    // inst1_source2_en_stage4
+        if(!rst_n || flush_stage4)
+            inst1_source2_en_stage4 <= 1'b0;
+        else if(hold_stage4)
+            inst1_source2_en_stage4 <= inst1_source2_en_stage4;
+        else if(decode0_vld)
+            inst1_source2_en_stage4 <= decode0_source2_vld;
+        else 
+            inst1_source2_en_stage4 <= 1'b0;
+    end
+    always @(posedge clk or negedge rst_n) begin    // inst2_source2_en_stage4
+        if(!rst_n || flush_stage4)
+            inst2_source2_en_stage4 <= 1'b0;
+        else if(hold_stage4)
+            inst2_source2_en_stage4 <= inst2_source2_en_stage4;
+        else if(decode0_vld)
+            inst2_source2_en_stage4 <= decode0_source2_vld;
+        else 
+            inst2_source2_en_stage4 <= 1'b0;
+    end
+    always @(posedge clk or negedge rst_n) begin    // inst3_source2_en_stage4
+        if(!rst_n || flush_stage4)
+            inst3_source2_en_stage4 <= 1'b0;
+        else if(hold_stage4)
+            inst3_source2_en_stage4 <= inst3_source2_en_stage4;
+        else if(decode0_vld)
+            inst3_source2_en_stage4 <= decode0_source2_vld;
+        else 
+            inst3_source2_en_stage4 <= 1'b0;
     end
 
 endmodule
