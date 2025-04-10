@@ -66,6 +66,7 @@ module AGU (
 
     input       [6:0]   dest_ALU0,
     input       [6:0]   dest_ALU1,
+    input       [6:0]   dest_AGU,
     input       [6:0]   dest_BRU,
 
     output  reg         AGU_select_vld,
@@ -554,18 +555,18 @@ module AGU (
             AGU_IQ_imm[0] <= AGU_IQ_imm[1];
             AGU_IQ_ROB_ID[0] <= AGU_IQ_ROB_ID[1];
             if((AGU_IQ_source1[1] == dest_ALU1) || (AGU_IQ_source1[1] == dest_ALU0) ||
-               (AGU_IQ_source1[1] == dest_BRU))
+               (AGU_IQ_source1[1] == dest_BRU)  || (AGU_IQ_source1[1] == dest_AGU))
                 AGU_IQ_source1_rdy[0] <= 1'b1;
             if((AGU_IQ_source2[1] == dest_ALU1) || (AGU_IQ_source2[1] == dest_ALU0) ||
-               (AGU_IQ_source2[1] == dest_BRU))
+               (AGU_IQ_source2[1] == dest_BRU)  || (AGU_IQ_source2[1] == dest_AGU))
                 AGU_IQ_source2_rdy[0] <= 1'b1;
         end
         else begin
             if((AGU_IQ_source1[0] == dest_ALU1) || (AGU_IQ_source1[0] == dest_ALU0) ||
-               (AGU_IQ_source1[0] == dest_BRU))
+               (AGU_IQ_source1[0] == dest_BRU)  || (AGU_IQ_source1[0] == dest_AGU))
                 AGU_IQ_source1_rdy[0] <= 1'b1;
             if((AGU_IQ_source2[0] == dest_ALU1) || (AGU_IQ_source2[0] == dest_ALU0) ||
-               (AGU_IQ_source2[0] == dest_BRU))
+               (AGU_IQ_source2[0] == dest_BRU)  || (AGU_IQ_source2[0] == dest_AGU))
                 AGU_IQ_source2_rdy[0] <= 1'b1;
         end
     end
@@ -650,18 +651,18 @@ module AGU (
             AGU_IQ_imm[1] <= AGU_IQ_imm[2];
             AGU_IQ_ROB_ID[1] <= AGU_IQ_ROB_ID[2];
             if((AGU_IQ_source1[2] == dest_ALU1) || (AGU_IQ_source1[2] == dest_ALU0) ||
-               (AGU_IQ_source1[2] == dest_BRU))
+               (AGU_IQ_source1[2] == dest_BRU)  || (AGU_IQ_source1[2] == dest_AGU))
                 AGU_IQ_source1_rdy[1] <= 1'b1;
             if((AGU_IQ_source2[2] == dest_ALU1) || (AGU_IQ_source2[2] == dest_ALU0) ||
-               (AGU_IQ_source2[2] == dest_BRU))
+               (AGU_IQ_source2[2] == dest_BRU)  || (AGU_IQ_source2[2] == dest_AGU))
                 AGU_IQ_source2_rdy[1] <= 1'b1;
         end
         else begin
             if((AGU_IQ_source1[1] == dest_ALU1) || (AGU_IQ_source1[1] == dest_ALU0) ||
-               (AGU_IQ_source1[1] == dest_BRU))
+               (AGU_IQ_source1[1] == dest_BRU)  || (AGU_IQ_source1[1] == dest_AGU))
                 AGU_IQ_source1_rdy[1] <= 1'b1;
             if((AGU_IQ_source2[1] == dest_ALU1) || (AGU_IQ_source2[1] == dest_ALU0) ||
-               (AGU_IQ_source2[1] == dest_BRU))
+               (AGU_IQ_source2[1] == dest_BRU)  || (AGU_IQ_source2[1] == dest_AGU))
                 AGU_IQ_source2_rdy[1] <= 1'b1;
         end
     end
@@ -746,18 +747,18 @@ module AGU (
             AGU_IQ_imm[2] <= AGU_IQ_imm[3];
             AGU_IQ_ROB_ID[2] <= AGU_IQ_ROB_ID[3];
             if((AGU_IQ_source1[3] == dest_ALU1) || (AGU_IQ_source1[3] == dest_ALU0) ||
-               (AGU_IQ_source1[3] == dest_BRU))
+               (AGU_IQ_source1[3] == dest_BRU)  || (AGU_IQ_source1[3] == dest_AGU))
                 AGU_IQ_source1_rdy[2] <= 1'b1;
             if((AGU_IQ_source2[3] == dest_ALU1) || (AGU_IQ_source2[3] == dest_ALU0) ||
-               (AGU_IQ_source2[3] == dest_BRU))
+               (AGU_IQ_source2[3] == dest_BRU)  || (AGU_IQ_source2[3] == dest_AGU))
                 AGU_IQ_source2_rdy[2] <= 1'b1;
         end
         else begin
             if((AGU_IQ_source1[2] == dest_ALU1) || (AGU_IQ_source1[2] == dest_ALU0) ||
-               (AGU_IQ_source1[2] == dest_BRU))
+               (AGU_IQ_source1[2] == dest_BRU)  || (AGU_IQ_source1[2] == dest_AGU))
                 AGU_IQ_source1_rdy[2] <= 1'b1;
             if((AGU_IQ_source2[2] == dest_ALU1) || (AGU_IQ_source2[2] == dest_ALU0) ||
-               (AGU_IQ_source2[2] == dest_BRU))
+               (AGU_IQ_source2[2] == dest_BRU)  || (AGU_IQ_source2[2] == dest_AGU))
                 AGU_IQ_source2_rdy[2] <= 1'b1;
         end
     end
@@ -842,18 +843,18 @@ module AGU (
             AGU_IQ_imm[3] <= AGU_IQ_imm[4];
             AGU_IQ_ROB_ID[3] <= AGU_IQ_ROB_ID[4];
             if((AGU_IQ_source1[4] == dest_ALU1) || (AGU_IQ_source1[4] == dest_ALU0) ||
-               (AGU_IQ_source1[4] == dest_BRU))
+               (AGU_IQ_source1[4] == dest_BRU)  || (AGU_IQ_source1[4] == dest_AGU))
                 AGU_IQ_source1_rdy[3] <= 1'b1;
             if((AGU_IQ_source2[4] == dest_ALU1) || (AGU_IQ_source2[4] == dest_ALU0) ||
-               (AGU_IQ_source2[4] == dest_BRU))
+               (AGU_IQ_source2[4] == dest_BRU)  || (AGU_IQ_source2[4] == dest_AGU))
                 AGU_IQ_source2_rdy[3] <= 1'b1;
         end
         else begin
             if((AGU_IQ_source1[3] == dest_ALU1) || (AGU_IQ_source1[3] == dest_ALU0) ||
-               (AGU_IQ_source1[3] == dest_BRU))
+               (AGU_IQ_source1[3] == dest_BRU)  || (AGU_IQ_source1[3] == dest_AGU))
                 AGU_IQ_source1_rdy[3] <= 1'b1;
             if((AGU_IQ_source2[3] == dest_ALU1) || (AGU_IQ_source2[3] == dest_ALU0) ||
-               (AGU_IQ_source2[3] == dest_BRU))
+               (AGU_IQ_source2[3] == dest_BRU)  || (AGU_IQ_source2[3] == dest_AGU))
                 AGU_IQ_source2_rdy[3] <= 1'b1;
         end
     end
@@ -938,18 +939,18 @@ module AGU (
             AGU_IQ_imm[4] <= AGU_IQ_imm[5];
             AGU_IQ_ROB_ID[4] <= AGU_IQ_ROB_ID[5];
             if((AGU_IQ_source1[5] == dest_ALU1) || (AGU_IQ_source1[5] == dest_ALU0) ||
-               (AGU_IQ_source1[5] == dest_BRU))
+               (AGU_IQ_source1[5] == dest_BRU)  || (AGU_IQ_source1[5] == dest_AGU))
                 AGU_IQ_source1_rdy[4] <= 1'b1;
             if((AGU_IQ_source2[5] == dest_ALU1) || (AGU_IQ_source2[5] == dest_ALU0) ||
-               (AGU_IQ_source2[5] == dest_BRU))
+               (AGU_IQ_source2[5] == dest_BRU)  || (AGU_IQ_source2[5] == dest_AGU))
                 AGU_IQ_source2_rdy[4] <= 1'b1;
         end
         else begin
             if((AGU_IQ_source1[4] == dest_ALU1) || (AGU_IQ_source1[4] == dest_ALU0) ||
-               (AGU_IQ_source1[4] == dest_BRU))
+               (AGU_IQ_source1[4] == dest_BRU)  || (AGU_IQ_source1[4] == dest_AGU))
                 AGU_IQ_source1_rdy[4] <= 1'b1;
             if((AGU_IQ_source2[4] == dest_ALU1) || (AGU_IQ_source2[4] == dest_ALU0) ||
-               (AGU_IQ_source2[4] == dest_BRU))
+               (AGU_IQ_source2[4] == dest_BRU)  || (AGU_IQ_source2[4] == dest_AGU))
                 AGU_IQ_source2_rdy[4] <= 1'b1;
         end
     end
@@ -1034,18 +1035,18 @@ module AGU (
             AGU_IQ_imm[5] <= AGU_IQ_imm[6];
             AGU_IQ_ROB_ID[5] <= AGU_IQ_ROB_ID[6];
             if((AGU_IQ_source1[6] == dest_ALU1) || (AGU_IQ_source1[6] == dest_ALU0) ||
-               (AGU_IQ_source1[6] == dest_BRU))
+               (AGU_IQ_source1[6] == dest_BRU)  || (AGU_IQ_source1[6] == dest_AGU))
                 AGU_IQ_source1_rdy[5] <= 1'b1;
             if((AGU_IQ_source2[6] == dest_ALU1) || (AGU_IQ_source2[6] == dest_ALU0) ||
-               (AGU_IQ_source2[6] == dest_BRU))
+               (AGU_IQ_source2[6] == dest_BRU)  || (AGU_IQ_source2[6] == dest_AGU))
                 AGU_IQ_source2_rdy[5] <= 1'b1;
         end
         else begin
             if((AGU_IQ_source1[5] == dest_ALU1) || (AGU_IQ_source1[5] == dest_ALU0) ||
-               (AGU_IQ_source1[5] == dest_BRU))
+               (AGU_IQ_source1[5] == dest_BRU)  || (AGU_IQ_source1[5] == dest_AGU))
                 AGU_IQ_source1_rdy[5] <= 1'b1;
             if((AGU_IQ_source2[5] == dest_ALU1) || (AGU_IQ_source2[5] == dest_ALU0) ||
-               (AGU_IQ_source2[5] == dest_BRU))
+               (AGU_IQ_source2[5] == dest_BRU)  || (AGU_IQ_source2[5] == dest_AGU))
                 AGU_IQ_source2_rdy[5] <= 1'b1;
         end
     end
@@ -1130,18 +1131,18 @@ module AGU (
             AGU_IQ_imm[6] <= AGU_IQ_imm[7];
             AGU_IQ_ROB_ID[6] <= AGU_IQ_ROB_ID[7];
             if((AGU_IQ_source1[7] == dest_ALU1) || (AGU_IQ_source1[7] == dest_ALU0) ||
-               (AGU_IQ_source1[7] == dest_BRU))
+               (AGU_IQ_source1[7] == dest_BRU)  || (AGU_IQ_source1[7] == dest_AGU))
                 AGU_IQ_source1_rdy[6] <= 1'b1;
             if((AGU_IQ_source2[7] == dest_ALU1) || (AGU_IQ_source2[7] == dest_ALU0) ||
-               (AGU_IQ_source2[7] == dest_BRU))
+               (AGU_IQ_source2[7] == dest_BRU)  || (AGU_IQ_source2[7] == dest_AGU))
                 AGU_IQ_source2_rdy[6] <= 1'b1;
         end
         else begin
             if((AGU_IQ_source1[6] == dest_ALU1) || (AGU_IQ_source1[6] == dest_ALU0) ||
-               (AGU_IQ_source1[6] == dest_BRU))
+               (AGU_IQ_source1[6] == dest_BRU)  || (AGU_IQ_source1[6] == dest_AGU))
                 AGU_IQ_source1_rdy[6] <= 1'b1;
             if((AGU_IQ_source2[6] == dest_ALU1) || (AGU_IQ_source2[6] == dest_ALU0) ||
-               (AGU_IQ_source2[6] == dest_BRU))
+               (AGU_IQ_source2[6] == dest_BRU)  || (AGU_IQ_source2[6] == dest_AGU))
                 AGU_IQ_source2_rdy[6] <= 1'b1;
         end
     end
@@ -1230,10 +1231,10 @@ module AGU (
         end
         else begin
             if((AGU_IQ_source1[7] == dest_ALU1) || (AGU_IQ_source1[7] == dest_ALU0) ||
-               (AGU_IQ_source1[7] == dest_BRU))
+               (AGU_IQ_source1[7] == dest_BRU)  || (AGU_IQ_source1[7] == dest_AGU))
                 AGU_IQ_source1_rdy[7] <= 1'b1;
             if((AGU_IQ_source2[7] == dest_ALU1) || (AGU_IQ_source2[7] == dest_ALU0) ||
-               (AGU_IQ_source2[7] == dest_BRU))
+               (AGU_IQ_source2[7] == dest_BRU)  || (AGU_IQ_source2[7] == dest_AGU))
                 AGU_IQ_source2_rdy[7] <= 1'b1;
         end
     end

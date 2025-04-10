@@ -1,4 +1,4 @@
-module stage5 (
+module before_dispatch (
     input               clk,
     input               rst_n,
 
@@ -53,10 +53,10 @@ module stage5 (
     output reg  [5:0]   inst2_ROB_ID,
     output reg  [5:0]   inst3_ROB_ID,
 
-    output reg  [3:0]   inst0_IQ_choose_stage5,
-    output reg  [3:0]   inst1_IQ_choose_stage5,
-    output reg  [3:0]   inst2_IQ_choose_stage5,
-    output reg  [3:0]   inst3_IQ_choose_stage5,
+    output reg  [3:0]   inst0_IQ_choose_bf_dispatch,
+    output reg  [3:0]   inst1_IQ_choose_bf_dispatch,
+    output reg  [3:0]   inst2_IQ_choose_bf_dispatch,
+    output reg  [3:0]   inst3_IQ_choose_bf_dispatch,
 
     output              inst0_PR_source1_rdy,
     output              inst1_PR_source1_rdy,
@@ -75,29 +75,29 @@ module stage5 (
 
     assign ROB_wr_ptr = ROB_wr_ptr_exp[5:0];
 
-    always @(*) begin       // inst0_IQ_choose_stage5
+    always @(*) begin       // inst0_IQ_choose_bf_dispatch
         if(inst0_vld_stage4)
-            inst0_IQ_choose_stage5 = inst0_IQ_choose_stage4;
+            inst0_IQ_choose_bf_dispatch = inst0_IQ_choose_stage4;
         else
-            inst0_IQ_choose_stage5 = 4'd0;
+            inst0_IQ_choose_bf_dispatch = 4'd0;
     end
-    always @(*) begin       // inst1_IQ_choose_stage5
+    always @(*) begin       // inst1_IQ_choose_bf_dispatch
         if(inst1_vld_stage4 && (!(|inst0_except_stage4)))
-            inst1_IQ_choose_stage5 = inst1_IQ_choose_stage4;
+            inst1_IQ_choose_bf_dispatch = inst1_IQ_choose_stage4;
         else
-            inst1_IQ_choose_stage5 = 4'd0;
+            inst1_IQ_choose_bf_dispatch = 4'd0;
     end
-    always @(*) begin       // inst2_IQ_choose_stage5
+    always @(*) begin       // inst2_IQ_choose_bf_dispatch
         if(inst2_vld_stage4 && (!(|inst0_except_stage4)) && (!(|inst1_except_stage4)))
-            inst2_IQ_choose_stage5 = inst2_IQ_choose_stage4;
+            inst2_IQ_choose_bf_dispatch = inst2_IQ_choose_stage4;
         else
-            inst2_IQ_choose_stage5 = 4'd0;
+            inst2_IQ_choose_bf_dispatch = 4'd0;
     end
-    always @(*) begin       // inst3_IQ_choose_stage5
+    always @(*) begin       // inst3_IQ_choose_bf_dispatch
         if(inst3_vld_stage4 && (!(|inst0_except_stage4)) && (!(|inst1_except_stage4)) && (!(|inst2_except_stage4)))
-            inst3_IQ_choose_stage5 = inst3_IQ_choose_stage4;
+            inst3_IQ_choose_bf_dispatch = inst3_IQ_choose_stage4;
         else
-            inst3_IQ_choose_stage5 = 4'd0;
+            inst3_IQ_choose_bf_dispatch = 4'd0;
     end
 
     assign wr_ROB_num = (inst0_vld_stage4 || (|inst0_except_stage4)) + 

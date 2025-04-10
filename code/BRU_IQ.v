@@ -68,8 +68,9 @@ module BRU_IQ (
     input               wr_pause,
 
     input       [7:0]   dest_ALU0,
-    input       [7:0]   dest_AGU,
     input       [7:0]   dest_ALU1,
+    input       [7:0]   dest_AGU,
+    input       [7:0]   dest_BRU,
 
     output  reg         BRU_select_vld,
     output  reg         BRU_select_dest_en,
@@ -379,10 +380,10 @@ module BRU_IQ (
         end
         else begin
             if(( BRU_IQ_source1[0] == dest_ALU0) || ( BRU_IQ_source1[0] == dest_AGU) ||
-               ( BRU_IQ_source1[0] == dest_ALU1))
+               ( BRU_IQ_source1[0] == dest_ALU1) || ( BRU_IQ_source1[0] == dest_BRU))
                  BRU_IQ_source1_rdy[0] <= 1'b1;
             if(( BRU_IQ_source2[0] == dest_ALU0) || ( BRU_IQ_source2[0] == dest_AGU) ||
-               ( BRU_IQ_source2[0] == dest_ALU1))
+               ( BRU_IQ_source2[0] == dest_ALU1) || ( BRU_IQ_source2[0] == dest_BRU))
                  BRU_IQ_source2_rdy[0] <= 1'b1;
         end
     end
@@ -474,18 +475,18 @@ module BRU_IQ (
              BRU_IQ_op[1] <= BRU_IQ_op[2];
              BRU_IQ_ROB_ID[1] <= BRU_IQ_ROB_ID[2];
             if(( BRU_IQ_source1[2] == dest_ALU0) || ( BRU_IQ_source1[2] == dest_AGU) ||
-               ( BRU_IQ_source1[2] == dest_ALU1))
+               ( BRU_IQ_source1[2] == dest_ALU1) || ( BRU_IQ_source1[2] == dest_BRU))
                  BRU_IQ_source1_rdy[1] <= 1'b1;
             if(( BRU_IQ_source2[2] == dest_ALU0) || ( BRU_IQ_source2[2] == dest_AGU) ||
-               ( BRU_IQ_source2[2] == dest_ALU1))
+               ( BRU_IQ_source2[2] == dest_ALU1) || ( BRU_IQ_source2[2] == dest_BRU))
                  BRU_IQ_source2_rdy[1] <= 1'b1;
         end
         else begin
             if(( BRU_IQ_source1[1] == dest_ALU0) || ( BRU_IQ_source1[1] == dest_AGU) ||
-               ( BRU_IQ_source1[1] == dest_ALU1))
+               ( BRU_IQ_source1[1] == dest_ALU1) || ( BRU_IQ_source1[1] == dest_BRU))
                  BRU_IQ_source1_rdy[1] <= 1'b1;
             if(( BRU_IQ_source2[1] == dest_ALU0) || ( BRU_IQ_source2[1] == dest_AGU) ||
-               ( BRU_IQ_source2[1] == dest_ALU1))
+               ( BRU_IQ_source2[1] == dest_ALU1) || ( BRU_IQ_source2[1] == dest_BRU))
                  BRU_IQ_source2_rdy[1] <= 1'b1;
         end
     end
@@ -577,18 +578,18 @@ module BRU_IQ (
              BRU_IQ_op[2] <= BRU_IQ_op[3];
              BRU_IQ_ROB_ID[2] <= BRU_IQ_ROB_ID[3];
             if(( BRU_IQ_source1[3] == dest_ALU0) || ( BRU_IQ_source1[3] == dest_AGU) ||
-               ( BRU_IQ_source1[3] == dest_ALU1))
+               ( BRU_IQ_source1[3] == dest_ALU1) || ( BRU_IQ_source1[3] == dest_BRU))
                  BRU_IQ_source1_rdy[2] <= 1'b1;
             if(( BRU_IQ_source2[3] == dest_ALU0) || ( BRU_IQ_source2[3] == dest_AGU) ||
-               ( BRU_IQ_source2[3] == dest_ALU1))
+               ( BRU_IQ_source2[3] == dest_ALU1) || ( BRU_IQ_source2[3] == dest_BRU))
                  BRU_IQ_source2_rdy[2] <= 1'b1;
         end
         else begin
             if(( BRU_IQ_source1[2] == dest_ALU0) || ( BRU_IQ_source1[2] == dest_AGU) ||
-               ( BRU_IQ_source1[2] == dest_ALU1))
+               ( BRU_IQ_source1[2] == dest_ALU1) || ( BRU_IQ_source1[2] == dest_BRU))
                  BRU_IQ_source1_rdy[2] <= 1'b1;
             if(( BRU_IQ_source2[2] == dest_ALU0) || ( BRU_IQ_source2[2] == dest_AGU) ||
-               ( BRU_IQ_source2[2] == dest_ALU1))
+               ( BRU_IQ_source2[2] == dest_ALU1) || ( BRU_IQ_source2[2] == dest_BRU))
                  BRU_IQ_source2_rdy[2] <= 1'b1;
         end
     end
@@ -684,10 +685,10 @@ module BRU_IQ (
         end
         else begin
             if(( BRU_IQ_source1[3] == dest_ALU0) || ( BRU_IQ_source1[3] == dest_AGU) ||
-               ( BRU_IQ_source1[3] == dest_ALU1))
+               ( BRU_IQ_source1[3] == dest_ALU1) || ( BRU_IQ_source1[3] == dest_BRU))
                  BRU_IQ_source1_rdy[3] <= 1'b1;
             if(( BRU_IQ_source2[3] == dest_ALU0) || ( BRU_IQ_source2[3] == dest_AGU) ||
-               ( BRU_IQ_source2[3] == dest_ALU1))
+               ( BRU_IQ_source2[3] == dest_ALU1) || ( BRU_IQ_source2[3] == dest_BRU))
                  BRU_IQ_source2_rdy[3] <= 1'b1;
         end
     end

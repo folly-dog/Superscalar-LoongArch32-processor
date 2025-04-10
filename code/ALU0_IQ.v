@@ -52,6 +52,7 @@ module ALU0_IQ (
     input       [19:0]  inst3_ALU0_imm,
     input       [5:0]   inst3_ROB_ID,
 
+    input       [6:0]   dest_ALU0,
     input       [6:0]   dest_ALU1,
     input       [6:0]   dest_AGU,
     input       [6:0]   dest_BRU,
@@ -533,18 +534,18 @@ module ALU0_IQ (
             ALU0_IQ_imm[0] <= ALU0_IQ_imm[1];
             ALU0_IQ_ROB_ID[0] <= ALU0_IQ_ROB_ID[1];
             if((ALU0_IQ_source1[1] == dest_ALU1) || (ALU0_IQ_source1[1] == dest_AGU) ||
-               (ALU0_IQ_source1[1] == dest_BRU))
+               (ALU0_IQ_source1[1] == dest_BRU)  || (ALU0_IQ_source1[1] == dest_ALU0))
                 ALU0_IQ_source1_rdy[0] <= 1'b1;
             if((ALU0_IQ_source2[1] == dest_ALU1) || (ALU0_IQ_source2[1] == dest_AGU) ||
-               (ALU0_IQ_source2[1] == dest_BRU))
+               (ALU0_IQ_source2[1] == dest_BRU)  || (ALU0_IQ_source2[1] == dest_ALU0))
                 ALU0_IQ_source2_rdy[0] <= 1'b1;
         end
         else begin
             if((ALU0_IQ_source1[0] == dest_ALU1) || (ALU0_IQ_source1[0] == dest_AGU) ||
-               (ALU0_IQ_source1[0] == dest_BRU))
+               (ALU0_IQ_source1[0] == dest_BRU)  || (ALU0_IQ_source1[0] == dest_ALU0))
                 ALU0_IQ_source1_rdy[0] <= 1'b1;
             if((ALU0_IQ_source2[0] == dest_ALU1) || (ALU0_IQ_source2[0] == dest_AGU) ||
-               (ALU0_IQ_source2[0] == dest_BRU))
+               (ALU0_IQ_source2[0] == dest_BRU)  || (ALU0_IQ_source2[0] == dest_ALU0))
                 ALU0_IQ_source2_rdy[0] <= 1'b1;
         end
     end
@@ -624,18 +625,18 @@ module ALU0_IQ (
             ALU0_IQ_imm[1] <= ALU0_IQ_imm[2];
             ALU0_IQ_ROB_ID[1] <= ALU0_IQ_ROB_ID[2];
             if((ALU0_IQ_source1[2] == dest_ALU1) || (ALU0_IQ_source1[2] == dest_AGU) ||
-               (ALU0_IQ_source1[2] == dest_BRU))
+               (ALU0_IQ_source1[2] == dest_BRU)  || (ALU0_IQ_source1[2] == dest_ALU0))
                 ALU0_IQ_source1_rdy[1] <= 1'b1;
             if((ALU0_IQ_source2[2] == dest_ALU1) || (ALU0_IQ_source2[2] == dest_AGU) ||
-               (ALU0_IQ_source2[2] == dest_BRU))
+               (ALU0_IQ_source2[2] == dest_BRU)  || (ALU0_IQ_source2[2] == dest_ALU0))
                 ALU0_IQ_source2_rdy[1] <= 1'b1;
         end
         else begin
             if((ALU0_IQ_source1[1] == dest_ALU1) || (ALU0_IQ_source1[1] == dest_AGU) ||
-               (ALU0_IQ_source1[1] == dest_BRU))
+               (ALU0_IQ_source1[1] == dest_BRU)  || (ALU0_IQ_source1[1] == dest_ALU0))
                 ALU0_IQ_source1_rdy[1] <= 1'b1;
             if((ALU0_IQ_source2[1] == dest_ALU1) || (ALU0_IQ_source2[1] == dest_AGU) ||
-               (ALU0_IQ_source2[1] == dest_BRU))
+               (ALU0_IQ_source2[1] == dest_BRU)  || (ALU0_IQ_source2[1] == dest_ALU0))
                 ALU0_IQ_source2_rdy[1] <= 1'b1;
         end
     end
@@ -715,18 +716,18 @@ module ALU0_IQ (
             ALU0_IQ_imm[2] <= ALU0_IQ_imm[3];
             ALU0_IQ_ROB_ID[2] <= ALU0_IQ_ROB_ID[3];
             if((ALU0_IQ_source1[3] == dest_ALU1) || (ALU0_IQ_source1[3] == dest_AGU) ||
-               (ALU0_IQ_source1[3] == dest_BRU))
+               (ALU0_IQ_source1[3] == dest_BRU)  || (ALU0_IQ_source1[3] == dest_ALU0))
                 ALU0_IQ_source1_rdy[2] <= 1'b1;
             if((ALU0_IQ_source2[3] == dest_ALU1) || (ALU0_IQ_source2[3] == dest_AGU) ||
-               (ALU0_IQ_source2[3] == dest_BRU))
+               (ALU0_IQ_source2[3] == dest_BRU)  || (ALU0_IQ_source2[3] == dest_ALU0))
                 ALU0_IQ_source2_rdy[2] <= 1'b1;
         end
         else begin
             if((ALU0_IQ_source1[2] == dest_ALU1) || (ALU0_IQ_source1[2] == dest_AGU) ||
-               (ALU0_IQ_source1[2] == dest_BRU))
+               (ALU0_IQ_source1[2] == dest_BRU)  || (ALU0_IQ_source1[2] == dest_ALU0))
                 ALU0_IQ_source1_rdy[2] <= 1'b1;
             if((ALU0_IQ_source2[2] == dest_ALU1) || (ALU0_IQ_source2[2] == dest_AGU) ||
-               (ALU0_IQ_source2[2] == dest_BRU))
+               (ALU0_IQ_source2[2] == dest_BRU)  || (ALU0_IQ_source2[2] == dest_ALU0))
                 ALU0_IQ_source2_rdy[2] <= 1'b1;
         end
     end
@@ -806,18 +807,18 @@ module ALU0_IQ (
             ALU0_IQ_imm[3] <= ALU0_IQ_imm[4];
             ALU0_IQ_ROB_ID[3] <= ALU0_IQ_ROB_ID[4];
             if((ALU0_IQ_source1[4] == dest_ALU1) || (ALU0_IQ_source1[4] == dest_AGU) ||
-               (ALU0_IQ_source1[4] == dest_BRU))
+               (ALU0_IQ_source1[4] == dest_BRU)  || (ALU0_IQ_source1[4] == dest_ALU0))
                 ALU0_IQ_source1_rdy[3] <= 1'b1;
             if((ALU0_IQ_source2[4] == dest_ALU1) || (ALU0_IQ_source2[4] == dest_AGU) ||
-               (ALU0_IQ_source2[4] == dest_BRU))
+               (ALU0_IQ_source2[4] == dest_BRU)  || (ALU0_IQ_source2[4] == dest_ALU0))
                 ALU0_IQ_source2_rdy[3] <= 1'b1;
         end
         else begin
             if((ALU0_IQ_source1[3] == dest_ALU1) || (ALU0_IQ_source1[3] == dest_AGU) ||
-               (ALU0_IQ_source1[3] == dest_BRU))
+               (ALU0_IQ_source1[3] == dest_BRU)  || (ALU0_IQ_source1[3] == dest_ALU0))
                 ALU0_IQ_source1_rdy[3] <= 1'b1;
             if((ALU0_IQ_source2[3] == dest_ALU1) || (ALU0_IQ_source2[3] == dest_AGU) ||
-               (ALU0_IQ_source2[3] == dest_BRU))
+               (ALU0_IQ_source2[3] == dest_BRU)  || (ALU0_IQ_source2[3] == dest_ALU0))
                 ALU0_IQ_source2_rdy[3] <= 1'b1;
         end
     end
@@ -898,18 +899,18 @@ module ALU0_IQ (
             ALU0_IQ_imm[4] <= ALU0_IQ_imm[5];
             ALU0_IQ_ROB_ID[4] <= ALU0_IQ_ROB_ID[5];
             if((ALU0_IQ_source1[5] == dest_ALU1) || (ALU0_IQ_source1[5] == dest_AGU) ||
-               (ALU0_IQ_source1[5] == dest_BRU))
+               (ALU0_IQ_source1[5] == dest_BRU)  || (ALU0_IQ_source1[5] == dest_ALU0))
                 ALU0_IQ_source1_rdy[4] <= 1'b1;
             if((ALU0_IQ_source2[5] == dest_ALU1) || (ALU0_IQ_source2[5] == dest_AGU) ||
-               (ALU0_IQ_source2[5] == dest_BRU))
+               (ALU0_IQ_source2[5] == dest_BRU)  || (ALU0_IQ_source2[5] == dest_ALU0))
                 ALU0_IQ_source2_rdy[4] <= 1'b1;
         end
         else begin
             if((ALU0_IQ_source1[4] == dest_ALU1) || (ALU0_IQ_source1[4] == dest_AGU) ||
-               (ALU0_IQ_source1[4] == dest_BRU))
+               (ALU0_IQ_source1[4] == dest_BRU)  || (ALU0_IQ_source1[4] == dest_ALU0))
                 ALU0_IQ_source1_rdy[4] <= 1'b1;
             if((ALU0_IQ_source2[4] == dest_ALU1) || (ALU0_IQ_source2[4] == dest_AGU) ||
-               (ALU0_IQ_source2[4] == dest_BRU))
+               (ALU0_IQ_source2[4] == dest_BRU)  || (ALU0_IQ_source2[4] == dest_ALU0))
                 ALU0_IQ_source2_rdy[4] <= 1'b1;
         end
     end
@@ -990,18 +991,18 @@ module ALU0_IQ (
             ALU0_IQ_imm[5] <= ALU0_IQ_imm[6];
             ALU0_IQ_ROB_ID[5] <= ALU0_IQ_ROB_ID[6];
             if((ALU0_IQ_source1[6] == dest_ALU1) || (ALU0_IQ_source1[6] == dest_AGU) ||
-               (ALU0_IQ_source1[6] == dest_BRU))
+               (ALU0_IQ_source1[6] == dest_BRU)  || (ALU0_IQ_source1[6] == dest_ALU0))
                 ALU0_IQ_source1_rdy[5] <= 1'b1;
             if((ALU0_IQ_source2[6] == dest_ALU1) || (ALU0_IQ_source2[6] == dest_AGU) ||
-               (ALU0_IQ_source2[6] == dest_BRU))
+               (ALU0_IQ_source2[6] == dest_BRU)  || (ALU0_IQ_source2[6] == dest_ALU0))
                 ALU0_IQ_source2_rdy[5] <= 1'b1;
         end
         else begin
             if((ALU0_IQ_source1[5] == dest_ALU1) || (ALU0_IQ_source1[5] == dest_AGU) ||
-               (ALU0_IQ_source1[5] == dest_BRU))
+               (ALU0_IQ_source1[5] == dest_BRU)  || (ALU0_IQ_source1[5] == dest_ALU0))
                 ALU0_IQ_source1_rdy[5] <= 1'b1;
             if((ALU0_IQ_source2[5] == dest_ALU1) || (ALU0_IQ_source2[5] == dest_AGU) ||
-               (ALU0_IQ_source2[5] == dest_BRU))
+               (ALU0_IQ_source2[5] == dest_BRU)  || (ALU0_IQ_source2[5] == dest_ALU0))
                 ALU0_IQ_source2_rdy[5] <= 1'b1;
         end
     end
@@ -1082,18 +1083,18 @@ module ALU0_IQ (
             ALU0_IQ_imm[6] <= ALU0_IQ_imm[7];
             ALU0_IQ_ROB_ID[6] <= ALU0_IQ_ROB_ID[7];
             if((ALU0_IQ_source1[7] == dest_ALU1) || (ALU0_IQ_source1[7] == dest_AGU) ||
-               (ALU0_IQ_source1[7] == dest_BRU))
+               (ALU0_IQ_source1[7] == dest_BRU)  || (ALU0_IQ_source1[7] == dest_ALU0))
                 ALU0_IQ_source1_rdy[6] <= 1'b1;
             if((ALU0_IQ_source2[7] == dest_ALU1) || (ALU0_IQ_source2[7] == dest_AGU) ||
-               (ALU0_IQ_source2[7] == dest_BRU))
+               (ALU0_IQ_source2[7] == dest_BRU)  || (ALU0_IQ_source2[7] == dest_ALU0))
                 ALU0_IQ_source2_rdy[6] <= 1'b1;
         end
         else begin
             if((ALU0_IQ_source1[6] == dest_ALU1) || (ALU0_IQ_source1[6] == dest_AGU) ||
-               (ALU0_IQ_source1[6] == dest_BRU))
+               (ALU0_IQ_source1[6] == dest_BRU)  || (ALU0_IQ_source1[6] == dest_ALU0))
                 ALU0_IQ_source1_rdy[6] <= 1'b1;
             if((ALU0_IQ_source2[6] == dest_ALU1) || (ALU0_IQ_source2[6] == dest_AGU) ||
-               (ALU0_IQ_source2[6] == dest_BRU))
+               (ALU0_IQ_source2[6] == dest_BRU)  || (ALU0_IQ_source2[6] == dest_ALU0))
                 ALU0_IQ_source2_rdy[6] <= 1'b1;
         end
     end
@@ -1177,10 +1178,10 @@ module ALU0_IQ (
         end
         else begin
             if((ALU0_IQ_source1[7] == dest_ALU1) || (ALU0_IQ_source1[7] == dest_AGU) ||
-               (ALU0_IQ_source1[7] == dest_BRU))
+               (ALU0_IQ_source1[7] == dest_BRU)  || (ALU0_IQ_source1[7] == dest_ALU0))
                 ALU0_IQ_source1_rdy[7] <= 1'b1;
             if((ALU0_IQ_source2[7] == dest_ALU1) || (ALU0_IQ_source2[7] == dest_AGU) ||
-               (ALU0_IQ_source2[7] == dest_BRU))
+               (ALU0_IQ_source2[7] == dest_BRU)  || (ALU0_IQ_source2[7] == dest_ALU0))
                 ALU0_IQ_source2_rdy[7] <= 1'b1;
         end
     end

@@ -6,41 +6,30 @@ module  freelist(
     input               stage4_pause,
 
     input       [2:0]   PR_num_need,
-    input       [1:0]   PR_num_wrback,
-    input       [1:0]   AR_num_retire,
+    input       [2:0]   PR_num_retire,
 
-    output reg  [6:0]   rd_ptr,
-    output      [6:0]   freelist_room
+    input       [5:0]   retire_PR0,
+    input       [5:0]   retire_PR1,
+    input       [5:0]   retire_PR2,
+    input       [5:0]   retire_PR3,
+
+    output reg  [5:0]   freePR0,
+    output reg  [5:0]   freePR1,
+    output reg  [5:0]   freePR2,
+    output reg  [5:0]   freePR3,
+    output      [5:0]   freelist_room
 );
+    reg  [5:0]  freelist [31:0];
+    reg  [5:0]  a_freelist [31:0];
 
-    reg  [6:0]  wr_ptr;
-    reg  [6:0]  a_rd_ptr;
+    reg  [5:0]  wr_ptr_exp;
+    wire [4:0]  wr_ptr;
+    reg  [5:0]  rd_ptr_exp;
+    wire [4:0]  rd_ptr;
 
-    always @(posedge clk or negedge rst_n) begin    // rd_ptr
-        if(!rst_n)
-            rd_ptr <= 7'd0;
-        else if(flush_stage4)
-            rd_ptr <= a_rd_ptr;
-        else if(stage4_pause)
-            rd_ptr <= rd_ptr;
-        else
-            rd_ptr <= rd_ptr + PR_num_need;
-    end
+    reg  [5:0]  a_wr_ptr_exp;
+    wire [4:0]  a_wr_ptr;
+    reg  [5:0]  a_rd_ptr_exp;
 
-    always @(posedge clk or negedge rst_n) begin    // wr_ptr
-        if(!rst_n)
-            wr_ptr <= 7'b1000000;
-        else
-            wr_ptr  <= wr_ptr + PR_num_wrback;
-    end
-
-    always @(posedge clk or negedge rst_n) begin    // a_rd_ptr
-        if(!rst_n)
-            a_rd_ptr <= 7'd0;
-        else
-            a_rd_ptr <= a_rd_ptr + AR_num_retire;
-    end
-
-    assign freelist_room = (wr_ptr - rd_ptr);
 
 endmodule

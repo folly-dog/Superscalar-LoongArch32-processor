@@ -4,7 +4,7 @@ module PR_status (
 
     input               flush_stage4,
 
-    input               inst0_dest_en,
+    input               inst0_dest_en,  // inst0_dest_PR_STA_en of "rename.v"
     input               inst1_dest_en,
     input               inst2_dest_en,
     input               inst3_dest_en,
