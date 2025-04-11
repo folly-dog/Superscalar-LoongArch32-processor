@@ -72,6 +72,7 @@ module BRU_IQ (
     input       [5:0]   dest_AGU,
     input       [5:0]   dest_BRU,
 
+    output              BRU_selected_vld,   // use for activate
     output  reg         BRU_select_vld,
     output  reg         BRU_select_dest_en,
     output  reg [31:0]  BRU_select_PC,
@@ -758,5 +759,7 @@ module BRU_IQ (
             default: BRU_select_vld <= 1'b0;
         endcase 
     end
+
+    assign BRU_selected_vld = |grant_excute;
     
 endmodule

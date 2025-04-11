@@ -60,6 +60,7 @@ module ALU0_IQ (
     output              wr_ALU0_IQ_pause,
     input               wr_pause,
 
+    output              ALU0_selected_vld,  // use for activate
     output  reg         ALU0_select_vld,
     output  reg [4:0]   ALU0_select_op,
     output  reg [19:0]  ALU0_select_imm,
@@ -1272,5 +1273,7 @@ module ALU0_IQ (
             default: ALU0_select_vld <= 1'b0;
         endcase 
     end
+
+    assign ALU0_selected_vld = |grant_excute;
 
 endmodule
