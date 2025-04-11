@@ -9,9 +9,9 @@ module ALU0_IQ (
     input               inst0_PR_source2_en,
     input               inst0_PR_source1_rdy,
     input               inst0_PR_source2_rdy,
-    input       [6:0]   inst0_PR_dest,
-    input       [6:0]   inst0_PR_source1,
-    input       [6:0]   inst0_PR_source2,
+    input       [5:0]   inst0_PR_dest,
+    input       [5:0]   inst0_PR_source1,
+    input       [5:0]   inst0_PR_source2,
     input       [4:0]   inst0_ALU0_op,
     input       [19:0]  inst0_ALU0_imm,
     input       [5:0]   inst0_ROB_ID,
@@ -21,9 +21,9 @@ module ALU0_IQ (
     input               inst1_PR_source2_en,
     input               inst1_PR_source1_rdy,
     input               inst1_PR_source2_rdy,
-    input       [6:0]   inst1_PR_dest,
-    input       [6:0]   inst1_PR_source1,
-    input       [6:0]   inst1_PR_source2,
+    input       [5:0]   inst1_PR_dest,
+    input       [5:0]   inst1_PR_source1,
+    input       [5:0]   inst1_PR_source2,
     input       [4:0]   inst1_ALU0_op,
     input       [19:0]  inst1_ALU0_imm,
     input       [5:0]   inst1_ROB_ID,
@@ -33,9 +33,9 @@ module ALU0_IQ (
     input               inst2_PR_source2_en,
     input               inst2_PR_source1_rdy,
     input               inst2_PR_source2_rdy,
-    input       [6:0]   inst2_PR_dest,
-    input       [6:0]   inst2_PR_source1,
-    input       [6:0]   inst2_PR_source2,
+    input       [5:0]   inst2_PR_dest,
+    input       [5:0]   inst2_PR_source1,
+    input       [5:0]   inst2_PR_source2,
     input       [4:0]   inst2_ALU0_op,
     input       [19:0]  inst2_ALU0_imm,
     input       [5:0]   inst2_ROB_ID,
@@ -45,17 +45,17 @@ module ALU0_IQ (
     input               inst3_PR_source2_en,
     input               inst3_PR_source1_rdy,
     input               inst3_PR_source2_rdy,
-    input       [6:0]   inst3_PR_dest,
-    input       [6:0]   inst3_PR_source1,
-    input       [6:0]   inst3_PR_source2,
+    input       [5:0]   inst3_PR_dest,
+    input       [5:0]   inst3_PR_source1,
+    input       [5:0]   inst3_PR_source2,
     input       [4:0]   inst3_ALU0_op,
     input       [19:0]  inst3_ALU0_imm,
     input       [5:0]   inst3_ROB_ID,
 
-    input       [6:0]   dest_ALU0,
-    input       [6:0]   dest_ALU1,
-    input       [6:0]   dest_AGU,
-    input       [6:0]   dest_BRU,
+    input       [5:0]   dest_ALU0,
+    input       [5:0]   dest_ALU1,
+    input       [5:0]   dest_AGU,
+    input       [5:0]   dest_BRU,
 
     output              wr_ALU0_IQ_pause,
     input               wr_pause,
@@ -63,9 +63,9 @@ module ALU0_IQ (
     output  reg         ALU0_select_vld,
     output  reg [4:0]   ALU0_select_op,
     output  reg [19:0]  ALU0_select_imm,
-    output  reg [6:0]   ALU0_select_dest,
-    output  reg [6:0]   ALU0_select_source1,
-    output  reg [6:0]   ALU0_select_source2,
+    output  reg [5:0]   ALU0_select_dest,
+    output  reg [5:0]   ALU0_select_source1,
+    output  reg [5:0]   ALU0_select_source2,
     output  reg [5:0]   ALU0_select_ROB_ID
 );
     reg [7:0]   ALU0_IQ_vld;
@@ -73,9 +73,9 @@ module ALU0_IQ (
     reg [7:0]   ALU0_IQ_source1_rdy;
     reg [7:0]   ALU0_IQ_source2_en;
     reg [7:0]   ALU0_IQ_source2_rdy;
-    reg [6:0]   ALU0_IQ_dest    [7:0];
-    reg [6:0]   ALU0_IQ_source1 [7:0];
-    reg [6:0]   ALU0_IQ_source2 [7:0];
+    reg [5:0]   ALU0_IQ_dest    [7:0];
+    reg [5:0]   ALU0_IQ_source1 [7:0];
+    reg [5:0]   ALU0_IQ_source2 [7:0];
     reg [5:0]   ALU0_IQ_ROB_ID  [7:0];
     reg [4:0]   ALU0_IQ_op      [7:0];
     reg [19:0]  ALU0_IQ_imm     [7:0];
@@ -1169,9 +1169,9 @@ module ALU0_IQ (
             ALU0_IQ_source1_rdy[7] <= 1'b0;
             ALU0_IQ_source2_en[7] <= 1'b0;
             ALU0_IQ_source2_rdy[7] <= 1'b0;
-            ALU0_IQ_dest[7] <= 7'd0;
-            ALU0_IQ_source1[7] <= 7'd0;
-            ALU0_IQ_source2[7] <= 7'd0;
+            ALU0_IQ_dest[7] <= 6'd0;
+            ALU0_IQ_source1[7] <= 6'd0;
+            ALU0_IQ_source2[7] <= 6'd0;
             ALU0_IQ_op[7] <= 5'd0;
             ALU0_IQ_imm[7] <= 20'd0;
             ALU0_IQ_ROB_ID[7] <= 6'd0;
@@ -1191,9 +1191,9 @@ module ALU0_IQ (
             ALU0_select_vld <= 1'b0;
             ALU0_select_op <= 5'd0;
             ALU0_select_imm <= 20'd0;
-            ALU0_select_dest <= 7'd0;
-            ALU0_select_source1 <= 7'd0;
-            ALU0_select_source2 <= 7'd0;
+            ALU0_select_dest <= 6'd0;
+            ALU0_select_source1 <= 6'd0;
+            ALU0_select_source2 <= 6'd0;
             ALU0_select_ROB_ID <= 6'd0;
         end
         else case (grant_excute)

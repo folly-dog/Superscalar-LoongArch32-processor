@@ -15,9 +15,9 @@ module AGU (
     input               inst0_PR_source2_en,
     input               inst0_PR_source1_rdy,
     input               inst0_PR_source2_rdy,
-    input       [6:0]   inst0_PR_dest,
-    input       [6:0]   inst0_PR_source1,
-    input       [6:0]   inst0_PR_source2,
+    input       [5:0]   inst0_PR_dest,
+    input       [5:0]   inst0_PR_source1,
+    input       [5:0]   inst0_PR_source2,
     input       [3:0]   inst0_AGU_op,
     input       [16:0]  inst0_AGU_imm,
     input       [5:0]   inst0_ROB_ID,
@@ -28,9 +28,9 @@ module AGU (
     input               inst1_PR_source2_en,
     input               inst1_PR_source1_rdy,
     input               inst1_PR_source2_rdy,
-    input       [6:0]   inst1_PR_dest,
-    input       [6:0]   inst1_PR_source1,
-    input       [6:0]   inst1_PR_source2,
+    input       [5:0]   inst1_PR_dest,
+    input       [5:0]   inst1_PR_source1,
+    input       [5:0]   inst1_PR_source2,
     input       [3:0]   inst1_AGU_op,
     input       [16:0]  inst1_AGU_imm,
     input       [5:0]   inst1_ROB_ID,
@@ -41,9 +41,9 @@ module AGU (
     input               inst2_PR_source2_en,
     input               inst2_PR_source1_rdy,
     input               inst2_PR_source2_rdy,
-    input       [6:0]   inst2_PR_dest,
-    input       [6:0]   inst2_PR_source1,
-    input       [6:0]   inst2_PR_source2,
+    input       [5:0]   inst2_PR_dest,
+    input       [5:0]   inst2_PR_source1,
+    input       [5:0]   inst2_PR_source2,
     input       [3:0]   inst2_AGU_op,
     input       [16:0]  inst2_AGU_imm,
     input       [5:0]   inst2_ROB_ID,
@@ -54,9 +54,9 @@ module AGU (
     input               inst3_PR_source2_en,
     input               inst3_PR_source1_rdy,
     input               inst3_PR_source2_rdy,
-    input       [6:0]   inst3_PR_dest,
-    input       [6:0]   inst3_PR_source1,
-    input       [6:0]   inst3_PR_source2,
+    input       [5:0]   inst3_PR_dest,
+    input       [5:0]   inst3_PR_source1,
+    input       [5:0]   inst3_PR_source2,
     input       [3:0]   inst3_AGU_op,
     input       [16:0]  inst3_AGU_imm,
     input       [5:0]   inst3_ROB_ID,
@@ -64,18 +64,18 @@ module AGU (
     output              wr_AGU_IQ_pause,
     input               wr_pause,
 
-    input       [6:0]   dest_ALU0,
-    input       [6:0]   dest_ALU1,
-    input       [6:0]   dest_AGU,
-    input       [6:0]   dest_BRU,
+    input       [5:0]   dest_ALU0,
+    input       [5:0]   dest_ALU1,
+    input       [5:0]   dest_AGU,
+    input       [5:0]   dest_BRU,
 
     output  reg         AGU_select_vld,
     output  reg [3:0]   AGU_select_op,
     output  reg [16:0]  AGU_select_imm,
     output  reg         AGU_select_dest_en,
-    output  reg [6:0]   AGU_select_dest,
-    output  reg [6:0]   AGU_select_source1,
-    output  reg [6:0]   AGU_select_source2,
+    output  reg [5:0]   AGU_select_dest,
+    output  reg [5:0]   AGU_select_source1,
+    output  reg [5:0]   AGU_select_source2,
     output  reg [5:0]   AGU_select_ROB_ID
 );
     reg [7:0]   AGU_IQ_vld;
@@ -84,9 +84,9 @@ module AGU (
     reg [7:0]   AGU_IQ_source1_rdy;
     reg [7:0]   AGU_IQ_source2_en;
     reg [7:0]   AGU_IQ_source2_rdy;
-    reg [6:0]   AGU_IQ_dest    [7:0];
-    reg [6:0]   AGU_IQ_source1 [7:0];
-    reg [6:0]   AGU_IQ_source2 [7:0];
+    reg [5:0]   AGU_IQ_dest    [7:0];
+    reg [5:0]   AGU_IQ_source1 [7:0];
+    reg [5:0]   AGU_IQ_source2 [7:0];
     reg [5:0]   AGU_IQ_ROB_ID  [7:0];
     reg [3:0]   AGU_IQ_op      [7:0];
     reg [16:0]  AGU_IQ_imm     [7:0];
@@ -1222,9 +1222,9 @@ module AGU (
             AGU_IQ_source1_rdy[7] <= 1'b0;
             AGU_IQ_source2_en[7] <= 1'b0;
             AGU_IQ_source2_rdy[7] <= 1'b0;
-            AGU_IQ_dest[7] <= 7'd0;
-            AGU_IQ_source1[7] <= 7'd0;
-            AGU_IQ_source2[7] <= 7'd0;
+            AGU_IQ_dest[7] <= 6'd0;
+            AGU_IQ_source1[7] <= 6'd0;
+            AGU_IQ_source2[7] <= 6'd0;
             AGU_IQ_op[7] <= 5'd0;
             AGU_IQ_imm[7] <= 20'd0;
             AGU_IQ_ROB_ID[7] <= 6'd0;
@@ -1245,9 +1245,9 @@ module AGU (
             AGU_select_op <= 4'd0;
             AGU_select_imm <= 17'd0;
             AGU_select_dest_en <= 1'b0;
-            AGU_select_dest <= 7'd0;
-            AGU_select_source1 <= 7'd0;
-            AGU_select_source2 <= 7'd0;
+            AGU_select_dest <= 6'd0;
+            AGU_select_source1 <= 6'd0;
+            AGU_select_source2 <= 6'd0;
             AGU_select_ROB_ID <= 6'd0;
         end
         else if(grant)begin

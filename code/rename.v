@@ -39,13 +39,13 @@ module rename (
     input       [4:0]   decode2_source2_AR,
     input       [4:0]   decode3_source2_AR,
 
-    input       [6:0]   freePR0,
-    input       [6:0]   freePR1,
-    input       [6:0]   freePR2,
-    input       [6:0]   freePR3,
-    input       [6:0]   freelist_room,
+    input       [5:0]   freePR0,
+    input       [5:0]   freePR1,
+    input       [5:0]   freePR2,
+    input       [5:0]   freePR3,
+    input       [5:0]   freelist_room,
 
-    input       [6:0]   RAT [31:0],
+    input       [5:0]   RAT [31:0],
 
     output              stage4_pause,
     output  reg [2:0]   PR_num_need,
@@ -60,30 +60,30 @@ module rename (
     output  reg         inst2_dest_RAT_en,
     output  reg         inst3_dest_RAT_en,
 
-    output  reg [6:0]   inst0_dest_PR,
-    output  reg [6:0]   inst1_dest_PR,
-    output  reg [6:0]   inst2_dest_PR,
-    output  reg [6:0]   inst3_dest_PR,
+    output  reg [5:0]   inst0_dest_PR,
+    output  reg [5:0]   inst1_dest_PR,
+    output  reg [5:0]   inst2_dest_PR,
+    output  reg [5:0]   inst3_dest_PR,
 
-    output  reg [6:0]   inst0_dest_PR_stage4,
-    output  reg [6:0]   inst1_dest_PR_stage4,
-    output  reg [6:0]   inst2_dest_PR_stage4,
-    output  reg [6:0]   inst3_dest_PR_stage4,
+    output  reg [5:0]   inst0_dest_PR_stage4,
+    output  reg [5:0]   inst1_dest_PR_stage4,
+    output  reg [5:0]   inst2_dest_PR_stage4,
+    output  reg [5:0]   inst3_dest_PR_stage4,
 
-    output  reg [6:0]   inst0_dest_old_PR_stage4,
-    output  reg [6:0]   inst1_dest_old_PR_stage4,
-    output  reg [6:0]   inst2_dest_old_PR_stage4,
-    output  reg [6:0]   inst3_dest_old_PR_stage4,
+    output  reg [5:0]   inst0_dest_old_PR_stage4,
+    output  reg [5:0]   inst1_dest_old_PR_stage4,
+    output  reg [5:0]   inst2_dest_old_PR_stage4,
+    output  reg [5:0]   inst3_dest_old_PR_stage4,
     
-    output  reg [6:0]   inst0_source1_PR_stage4,
-    output  reg [6:0]   inst1_source1_PR_stage4,
-    output  reg [6:0]   inst2_source1_PR_stage4,
-    output  reg [6:0]   inst3_source1_PR_stage4,
+    output  reg [5:0]   inst0_source1_PR_stage4,
+    output  reg [5:0]   inst1_source1_PR_stage4,
+    output  reg [5:0]   inst2_source1_PR_stage4,
+    output  reg [5:0]   inst3_source1_PR_stage4,
 
-    output  reg [6:0]   inst0_source2_PR_stage4,
-    output  reg [6:0]   inst1_source2_PR_stage4,
-    output  reg [6:0]   inst2_source2_PR_stage4,
-    output  reg [6:0]   inst3_source2_PR_stage4,
+    output  reg [5:0]   inst0_source2_PR_stage4,
+    output  reg [5:0]   inst1_source2_PR_stage4,
+    output  reg [5:0]   inst2_source2_PR_stage4,
+    output  reg [5:0]   inst3_source2_PR_stage4,
 
     output  reg         inst0_source1_en_stage4,
     output  reg         inst1_source1_en_stage4,
@@ -94,11 +94,10 @@ module rename (
     output  reg         inst2_source2_en_stage4,
     output  reg         inst3_source2_en_stage4
 );
-    wire [6:0]  PR_idx_help;
-    wire [6:0]  PR0_rd;
-    wire [6:0]  PR1_rd;
-    wire [6:0]  PR2_rd;
-    wire [6:0]  PR3_rd;
+    wire [5:0]  PR0_rd;
+    wire [5:0]  PR1_rd;
+    wire [5:0]  PR2_rd;
+    wire [5:0]  PR3_rd;
 
     assign PR0_rd = freePR0;
     assign PR1_rd = freePR1;
@@ -166,14 +165,14 @@ module rename (
         if(inst0_dest_PR_STA_en)
             inst0_dest_PR = PR0_rd;
         else
-            inst0_dest_PR = 7'd0;
+            inst0_dest_PR = 6'd0;
     end
 
     always @(*) begin       // inst1_dest_PR
         if(inst1_dest_PR_STA_en)
             inst1_dest_PR = inst0_dest_PR_STA_en ? PR1_rd : PR0_rd;
         else
-            inst1_dest_PR = 7'd0;
+            inst1_dest_PR = 6'd0;
     end
 
     always @(*) begin       // inst2_dest_PR
@@ -185,7 +184,7 @@ module rename (
                 2'b00: inst2_dest_PR = PR0_rd;
             endcase
         else
-            inst2_dest_PR = 7'd0;
+            inst2_dest_PR = 6'd0;
     end
 
     always @(*) begin       // inst3_dest_PR
@@ -201,14 +200,14 @@ module rename (
                 3'b000: inst3_dest_PR = PR0_rd;
             endcase
         else
-            inst3_dest_PR = 7'd0;
+            inst3_dest_PR = 6'd0;
     end
 
     always @(posedge clk or negedge rst_n) begin        // inst0_dest_PR_stage4
         if(!rst_n)
-            inst0_dest_PR_stage4 <= 7'd0;
+            inst0_dest_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst0_dest_PR_stage4 <= 7'd0;
+            inst0_dest_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst0_dest_PR_stage4 <= inst0_dest_PR_stage4;
         else if(decode0_dest_vld)
@@ -217,9 +216,9 @@ module rename (
 
     always @(posedge clk or negedge rst_n) begin        // inst1_dest_PR_stage4
         if(!rst_n)
-            inst1_dest_PR_stage4 <= 7'd0;
+            inst1_dest_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst1_dest_PR_stage4 <= 7'd0;
+            inst1_dest_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst1_dest_PR_stage4 <= inst1_dest_PR_stage4;
         else if(decode1_dest_vld)
@@ -228,9 +227,9 @@ module rename (
 
     always @(posedge clk or negedge rst_n) begin        // inst2_dest_PR_stage4
         if(!rst_n)
-            inst2_dest_PR_stage4 <= 7'd0;
+            inst2_dest_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst2_dest_PR_stage4 <= 7'd0;
+            inst2_dest_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst2_dest_PR_stage4 <= inst2_dest_PR_stage4;
         else if(decode2_dest_vld)
@@ -239,9 +238,9 @@ module rename (
 
     always @(posedge clk or negedge rst_n) begin        // inst3_dest_PR_stage4
         if(!rst_n)
-            inst3_dest_PR_stage4 <= 7'd0;
+            inst3_dest_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst3_dest_PR_stage4 <= 7'd0;
+            inst3_dest_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst3_dest_PR_stage4 <= inst3_dest_PR_stage4;
         else if(decode3_dest_vld)
@@ -250,9 +249,9 @@ module rename (
 
     always @(posedge clk or negedge rst_n) begin        // inst0_dest_old_PR_stage4
         if(!rst_n)
-            inst0_dest_old_PR_stage4 <= 7'd0;
+            inst0_dest_old_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst0_dest_old_PR_stage4 <= 7'd0;
+            inst0_dest_old_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst0_dest_old_PR_stage4 <= inst0_dest_old_PR_stage4;
         else if(decode0_dest_vld)
@@ -261,9 +260,9 @@ module rename (
 
     always @(posedge clk or negedge rst_n) begin        // inst1_dest_old_PR_stage4
         if(!rst_n)
-            inst1_dest_old_PR_stage4 <= 7'd0;
+            inst1_dest_old_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst1_dest_old_PR_stage4 <= 7'd0;
+            inst1_dest_old_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst1_dest_old_PR_stage4 <= inst1_dest_old_PR_stage4;
         else if(decode0_dest_vld)
@@ -272,9 +271,9 @@ module rename (
 
     always @(posedge clk or negedge rst_n) begin        // inst2_dest_old_PR_stage4
         if(!rst_n)
-            inst2_dest_old_PR_stage4 <= 7'd0;
+            inst2_dest_old_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst2_dest_old_PR_stage4 <= 7'd0;
+            inst2_dest_old_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst2_dest_old_PR_stage4 <= inst2_dest_old_PR_stage4;
         else if(decode0_dest_vld)
@@ -283,9 +282,9 @@ module rename (
 
     always @(posedge clk or negedge rst_n) begin        // inst3_dest_old_PR_stage4
         if(!rst_n)
-            inst3_dest_old_PR_stage4 <= 7'd0;
+            inst3_dest_old_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst3_dest_old_PR_stage4 <= 7'd0;
+            inst3_dest_old_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst3_dest_old_PR_stage4 <= inst3_dest_old_PR_stage4;
         else if(decode0_dest_vld)
@@ -294,41 +293,35 @@ module rename (
 
     always @(posedge clk or negedge rst_n) begin        // inst0_source1_PR_stage4
         if(!rst_n)
-            inst0_source1_PR_stage4 <= 7'd0;
+            inst0_source1_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst0_source1_PR_stage4 <= 7'd0;
+            inst0_source1_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst0_source1_PR_stage4 <= inst0_source1_PR_stage4;
-        else if(decode0_vld && decode0_source1_vld)begin
-            if(RAT_en[decode0_source1_AR])
-                inst0_source1_PR_stage4 <= RAT[decode0_source1_AR];
-            else
-                inst0_source1_PR_stage4 <= 7'd0;
-        end
+        else if(decode0_vld && decode0_source1_vld)
+            inst0_source1_PR_stage4 <= RAT[decode0_source1_AR];
     end
 
     always @(posedge clk or negedge rst_n) begin        // inst1_source1_PR_stage4
         if(!rst_n)
-            inst1_source1_PR_stage4 <= 7'd0;
+            inst1_source1_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst1_source1_PR_stage4 <= 7'd0;
+            inst1_source1_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst1_source1_PR_stage4 <= inst1_source1_PR_stage4;
         else if(decode1_vld && decode1_source1_vld)begin
             if(decode1_source1_AR == decode0_dest_AR)
                 inst1_source1_PR_stage4 <= inst0_dest_PR;
-            else if(RAT_en[decode1_source1_AR])
-                inst1_source1_PR_stage4 <= RAT[decode1_source1_AR];
             else
-                inst1_source1_PR_stage4 <= 7'd0;
+                inst1_source1_PR_stage4 <= RAT[decode1_source1_AR];
         end
     end
 
     always @(posedge clk or negedge rst_n) begin        // inst2_source1_PR_stage4
         if(!rst_n)
-            inst2_source1_PR_stage4 <= 7'd0;
+            inst2_source1_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst2_source1_PR_stage4 <= 7'd0;
+            inst2_source1_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst2_source1_PR_stage4 <= inst2_source1_PR_stage4;
         else if(decode2_vld && decode2_source1_vld)begin
@@ -336,18 +329,16 @@ module rename (
                 inst2_source1_PR_stage4 <= inst1_dest_PR;
             else if(decode2_source1_AR == decode0_dest_AR)
                 inst2_source1_PR_stage4 <= inst0_dest_PR;
-            else if(RAT_en[decode2_source1_AR])
-                inst2_source1_PR_stage4 <= RAT[decode2_source1_AR];
             else
-                inst2_source1_PR_stage4 <= 7'd0;
+                inst2_source1_PR_stage4 <= RAT[decode2_source1_AR];
         end
     end
 
     always @(posedge clk or negedge rst_n) begin        // inst3_source1_PR_stage4
         if(!rst_n)
-            inst3_source1_PR_stage4 <= 7'd0;
+            inst3_source1_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst3_source1_PR_stage4 <= 7'd0;
+            inst3_source1_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst3_source1_PR_stage4 <= inst3_source1_PR_stage4;
         else if(decode3_vld && decode3_source1_vld)begin
@@ -357,50 +348,42 @@ module rename (
                 inst3_source1_PR_stage4 <= inst1_dest_PR;
             else if(decode3_source1_AR == decode0_dest_AR)
                 inst3_source1_PR_stage4 <= inst0_dest_PR;
-            else if(RAT_en[decode3_source1_AR])
-                inst3_source1_PR_stage4 <= RAT[decode3_source1_AR];
             else
-                inst3_source1_PR_stage4 <= 7'd0;
+                inst3_source1_PR_stage4 <= RAT[decode3_source1_AR];
         end
     end
 
     always @(posedge clk or negedge rst_n) begin        // inst0_source2_PR_stage4
         if(!rst_n)
-            inst0_source2_PR_stage4 <= 7'd0;
+            inst0_source2_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst0_source2_PR_stage4 <= 7'd0;
+            inst0_source2_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst0_source2_PR_stage4 <= inst0_source2_PR_stage4;
-        else if(decode0_vld && decode0_source2_vld)begin
-            if(RAT_en[decode0_source2_AR])
-                inst0_source2_PR_stage4 <= RAT[decode0_source2_AR];
-            else
-                inst0_source2_PR_stage4 <= 7'd0;
-        end
+        else if(decode0_vld && decode0_source2_vld)
+            inst0_source2_PR_stage4 <= RAT[decode0_source2_AR];
     end
 
     always @(posedge clk or negedge rst_n) begin        // inst1_source2_PR_stage4
         if(!rst_n)
-            inst1_source2_PR_stage4 <= 7'd0;
+            inst1_source2_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst1_source2_PR_stage4 <= 7'd0;
+            inst1_source2_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst1_source2_PR_stage4 <= inst1_source2_PR_stage4;
         else if(decode1_vld && decode1_source2_vld)begin
             if(decode1_source2_AR == decode0_dest_AR)
                 inst1_source2_PR_stage4 <= inst0_dest_PR;
-            else if(RAT_en[decode1_source2_AR])
-                inst1_source2_PR_stage4 <= RAT[decode1_source2_AR];
             else
-                inst1_source2_PR_stage4 <= 7'd0;
+                inst1_source2_PR_stage4 <= RAT[decode1_source2_AR];
         end
     end
 
     always @(posedge clk or negedge rst_n) begin        // inst2_source2_PR_stage4
         if(!rst_n)
-            inst2_source2_PR_stage4 <= 7'd0;
+            inst2_source2_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst2_source2_PR_stage4 <= 7'd0;
+            inst2_source2_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst2_source2_PR_stage4 <= inst2_source2_PR_stage4;
         else if(decode2_vld && decode2_source2_vld)begin
@@ -408,18 +391,16 @@ module rename (
                 inst2_source2_PR_stage4 <= inst1_dest_PR;
             else if(decode2_source2_AR == decode0_dest_AR)
                 inst2_source2_PR_stage4 <= inst0_dest_PR;
-            else if(RAT_en[decode2_source2_AR])
-                inst2_source2_PR_stage4 <= RAT[decode2_source2_AR];
             else
-                inst2_source2_PR_stage4 <= 7'd0;
+                inst2_source2_PR_stage4 <= RAT[decode2_source2_AR];
         end
     end
 
     always @(posedge clk or negedge rst_n) begin        // inst3_source2_PR_stage4
         if(!rst_n)
-            inst3_source2_PR_stage4 <= 7'd0;
+            inst3_source2_PR_stage4 <= 6'd0;
         else if(flush_stage4)
-            inst3_source2_PR_stage4 <= 7'd0;
+            inst3_source2_PR_stage4 <= 6'd0;
         else if(hold_stage4)
             inst3_source2_PR_stage4 <= inst3_source2_PR_stage4;
         else if(decode3_vld && decode3_source2_vld)begin
@@ -429,10 +410,8 @@ module rename (
                 inst3_source2_PR_stage4 <= inst1_dest_PR;
             else if(decode3_source2_AR == decode0_dest_AR)
                 inst3_source2_PR_stage4 <= inst0_dest_PR;
-            else if(RAT_en[decode3_source2_AR])
-                inst3_source2_PR_stage4 <= RAT[decode3_source2_AR];
             else
-                inst3_source2_PR_stage4 <= 7'd0;
+                inst3_source2_PR_stage4 <= RAT[decode3_source2_AR];
         end
     end
 

@@ -7,60 +7,60 @@ module ALU1_IQ (
     input               inst0_ALU1_en,
     input               inst0_PR_source1_rdy,
     input               inst0_PR_source2_rdy,
-    input       [6:0]   inst0_PR_dest,
-    input       [6:0]   inst0_PR_source1,
-    input       [6:0]   inst0_PR_source2,
+    input       [5:0]   inst0_PR_dest,
+    input       [5:0]   inst0_PR_source1,
+    input       [5:0]   inst0_PR_source2,
     input       [2:0]   inst0_ALU1_op,
     input       [5:0]   inst0_ROB_ID,
 
     input               inst1_ALU1_en,
     input               inst1_PR_source1_rdy,
     input               inst1_PR_source2_rdy,
-    input       [6:0]   inst1_PR_dest,
-    input       [6:0]   inst1_PR_source1,
-    input       [6:0]   inst1_PR_source2,
+    input       [5:0]   inst1_PR_dest,
+    input       [5:0]   inst1_PR_source1,
+    input       [5:0]   inst1_PR_source2,
     input       [2:0]   inst1_ALU1_op,
     input       [5:0]   inst1_ROB_ID,
 
     input               inst2_ALU1_en,
     input               inst2_PR_source1_rdy,
     input               inst2_PR_source2_rdy,
-    input       [6:0]   inst2_PR_dest,
-    input       [6:0]   inst2_PR_source1,
-    input       [6:0]   inst2_PR_source2,
+    input       [5:0]   inst2_PR_dest,
+    input       [5:0]   inst2_PR_source1,
+    input       [5:0]   inst2_PR_source2,
     input       [2:0]   inst2_ALU1_op,
     input       [5:0]   inst2_ROB_ID,
 
     input               inst3_ALU1_en,
     input               inst3_PR_source1_rdy,
     input               inst3_PR_source2_rdy,
-    input       [6:0]   inst3_PR_dest,
-    input       [6:0]   inst3_PR_source1,
-    input       [6:0]   inst3_PR_source2,
+    input       [5:0]   inst3_PR_dest,
+    input       [5:0]   inst3_PR_source1,
+    input       [5:0]   inst3_PR_source2,
     input       [2:0]   inst3_ALU1_op,
     input       [5:0]   inst3_ROB_ID,
 
     output              wr_ALU1_IQ_pause,
     input               wr_pause,
 
-    input       [6:0]   dest_ALU0,
-    input       [6:0]   dest_ALU1,
-    input       [6:0]   dest_AGU,
-    input       [6:0]   dest_BRU,
+    input       [5:0]   dest_ALU0,
+    input       [5:0]   dest_ALU1,
+    input       [5:0]   dest_AGU,
+    input       [5:0]   dest_BRU,
 
     output  reg         ALU1_select_vld,
     output  reg [2:0]   ALU1_select_op,
-    output  reg [6:0]   ALU1_select_dest,
-    output  reg [6:0]   ALU1_select_source1,
-    output  reg [6:0]   ALU1_select_source2,
+    output  reg [5:0]   ALU1_select_dest,
+    output  reg [5:0]   ALU1_select_source1,
+    output  reg [5:0]   ALU1_select_source2,
     output  reg [5:0]   ALU1_select_ROB_ID
 );
     reg [3:0]   ALU1_IQ_vld;
     reg [3:0]   ALU1_IQ_source1_rdy;
     reg [3:0]   ALU1_IQ_source2_rdy;
-    reg [6:0]   ALU1_IQ_dest    [3:0];
-    reg [6:0]   ALU1_IQ_source1 [3:0];
-    reg [6:0]   ALU1_IQ_source2 [3:0];
+    reg [5:0]   ALU1_IQ_dest    [3:0];
+    reg [5:0]   ALU1_IQ_source1 [3:0];
+    reg [5:0]   ALU1_IQ_source2 [3:0];
     reg [5:0]   ALU1_IQ_ROB_ID  [3:0];
     reg [2:0]   ALU1_IQ_op      [3:0];
 
@@ -513,9 +513,9 @@ module ALU1_IQ (
             endcase
         else if(|grant_excute)begin
             ALU1_IQ_vld[3] <= 1'b0;
-            ALU1_IQ_dest[3] <= 7'd0;
-            ALU1_IQ_source1[3] <= 7'd0;
-            ALU1_IQ_source2[3] <= 7'd0;
+            ALU1_IQ_dest[3] <= 6'd0;
+            ALU1_IQ_source1[3] <= 6'd0;
+            ALU1_IQ_source2[3] <= 6'd0;
             ALU1_IQ_op[3] <= 3'd0;
             ALU1_IQ_ROB_ID[3] <= 6'd0;
             ALU1_IQ_source1_rdy[3] <= 1'b0;
@@ -535,9 +535,9 @@ module ALU1_IQ (
         if((!rst_n) || flush)begin
             ALU1_select_vld <= 1'b0;
             ALU1_select_op <= 3'd0;
-            ALU1_select_dest <= 7'd0;
-            ALU1_select_source1 <= 7'd0;
-            ALU1_select_source2 <= 7'd0;
+            ALU1_select_dest <= 6'd0;
+            ALU1_select_source1 <= 6'd0;
+            ALU1_select_source2 <= 6'd0;
             ALU1_select_ROB_ID <= 6'd0;
         end
         else case (grant_excute)

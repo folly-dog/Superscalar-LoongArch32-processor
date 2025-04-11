@@ -13,9 +13,9 @@ module BRU_IQ (
     input               inst0_PR_source2_en,
     input               inst0_PR_source1_rdy,
     input               inst0_PR_source2_rdy,
-    input       [6:0]   inst0_PR_dest,
-    input       [6:0]   inst0_PR_source1,
-    input       [6:0]   inst0_PR_source2,
+    input       [5:0]   inst0_PR_dest,
+    input       [5:0]   inst0_PR_source1,
+    input       [5:0]   inst0_PR_source2,
     input       [3:0]   inst0_BRU_op,
     input       [5:0]   inst0_ROB_ID,
 
@@ -28,9 +28,9 @@ module BRU_IQ (
     input               inst1_PR_source2_en,
     input               inst1_PR_source1_rdy,
     input               inst1_PR_source2_rdy,
-    input       [6:0]   inst1_PR_dest,
-    input       [6:0]   inst1_PR_source1,
-    input       [6:0]   inst1_PR_source2,
+    input       [5:0]   inst1_PR_dest,
+    input       [5:0]   inst1_PR_source1,
+    input       [5:0]   inst1_PR_source2,
     input       [3:0]   inst1_BRU_op,
     input       [5:0]   inst1_ROB_ID,
 
@@ -43,9 +43,9 @@ module BRU_IQ (
     input               inst2_PR_source2_en,
     input               inst2_PR_source1_rdy,
     input               inst2_PR_source2_rdy,
-    input       [6:0]   inst2_PR_dest,
-    input       [6:0]   inst2_PR_source1,
-    input       [6:0]   inst2_PR_source2,
+    input       [5:0]   inst2_PR_dest,
+    input       [5:0]   inst2_PR_source1,
+    input       [5:0]   inst2_PR_source2,
     input       [3:0]   inst2_BRU_op,
     input       [5:0]   inst2_ROB_ID,
 
@@ -58,19 +58,19 @@ module BRU_IQ (
     input               inst3_PR_source2_en,
     input               inst3_PR_source1_rdy,
     input               inst3_PR_source2_rdy,
-    input       [6:0]   inst3_PR_dest,
-    input       [6:0]   inst3_PR_source1,
-    input       [6:0]   inst3_PR_source2,
+    input       [5:0]   inst3_PR_dest,
+    input       [5:0]   inst3_PR_source1,
+    input       [5:0]   inst3_PR_source2,
     input       [3:0]   inst3_BRU_op,
     input       [5:0]   inst3_ROB_ID,
 
     output              wr_BRU_IQ_pause,
     input               wr_pause,
 
-    input       [7:0]   dest_ALU0,
-    input       [7:0]   dest_ALU1,
-    input       [7:0]   dest_AGU,
-    input       [7:0]   dest_BRU,
+    input       [5:0]   dest_ALU0,
+    input       [5:0]   dest_ALU1,
+    input       [5:0]   dest_AGU,
+    input       [5:0]   dest_BRU,
 
     output  reg         BRU_select_vld,
     output  reg         BRU_select_dest_en,
@@ -78,9 +78,9 @@ module BRU_IQ (
     output  reg [31:0]  BRU_select_target_PC,
     output  reg [25:0]  BRU_select_imm,
     output  reg [3:0]   BRU_select_op,
-    output  reg [6:0]   BRU_select_dest,
-    output  reg [6:0]   BRU_select_source1,
-    output  reg [6:0]   BRU_select_source2,
+    output  reg [5:0]   BRU_select_dest,
+    output  reg [5:0]   BRU_select_source1,
+    output  reg [5:0]   BRU_select_source2,
     output  reg [5:0]   BRU_select_ROB_ID
 );
     reg [3:0]   BRU_IQ_vld;
@@ -92,9 +92,9 @@ module BRU_IQ (
     reg [3:0]   BRU_IQ_source2_en;
     reg [3:0]   BRU_IQ_source1_rdy;
     reg [3:0]   BRU_IQ_source2_rdy;
-    reg [6:0]   BRU_IQ_dest    [3:0];
-    reg [6:0]   BRU_IQ_source1 [3:0];
-    reg [6:0]   BRU_IQ_source2 [3:0];
+    reg [5:0]   BRU_IQ_dest    [3:0];
+    reg [5:0]   BRU_IQ_source1 [3:0];
+    reg [5:0]   BRU_IQ_source2 [3:0];
     reg [5:0]   BRU_IQ_ROB_ID  [3:0];
     reg [3:0]   BRU_IQ_op      [3:0];
 
@@ -677,9 +677,9 @@ module BRU_IQ (
             BRU_IQ_PC[3] <= 32'd0;
             BRU_IQ_target_PC[3] <= 32'd0;
             BRU_IQ_imm[3] <= 26'd0;
-            BRU_IQ_dest[3] <= 7'd0;
-            BRU_IQ_source1[3] <= 7'd0;
-            BRU_IQ_source2[3] <= 7'd0;
+            BRU_IQ_dest[3] <= 6'd0;
+            BRU_IQ_source1[3] <= 6'd0;
+            BRU_IQ_source2[3] <= 6'd0;
             BRU_IQ_op[3] <= 4'd0;
             BRU_IQ_ROB_ID[3] <= 6'd0;
         end
@@ -701,9 +701,9 @@ module BRU_IQ (
             BRU_select_target_PC <= 32'd0;
             BRU_select_imm <= 26'd0;
             BRU_select_op <= 4'd0;
-            BRU_select_dest <= 7'd0;
-            BRU_select_source1 <= 7'd0;
-            BRU_select_source2 <= 7'd0;
+            BRU_select_dest <= 6'd0;
+            BRU_select_source1 <= 6'd0;
+            BRU_select_source2 <= 6'd0;
             BRU_select_ROB_ID <= 6'd0;
         end
         else case (grant_excute)
