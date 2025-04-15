@@ -1,4 +1,4 @@
-module  rd_   File(
+module  rd_File(
     input               clk,
     input               rst_n,
 
@@ -13,7 +13,9 @@ module  rd_   File(
     input       [5:0]   ALU0_select_ROB_ID,
 
     input       [5:0]   ALU0_PR_bypass,     // use bypass
+    input       [5:0]   BRU_PR_bypass,
     input       [31:0]  ALU0_data_bypass,
+    input       [31:0]  BRU_data_bypass,
 
     output  reg         ALU0_vld,
     output  reg [4:0]   ALU0_op,
@@ -45,6 +47,44 @@ module  rd_   File(
     always @(posedge clk) begin     // ALU0_ROB_ID
         if(ALU0_select_vld)
             ALU0_ROB_ID <= ALU0_select_ROB_ID;
+    end
+
+    always @(posedge clk) begin     // ALU0_PR_source1
+        if(ALU0_select_vld)
+            ALU0_PR_source1 <= ALU0_select_source1;
+    end
+
+    always @(posedge clk) begin     // ALU0_PR_source2
+        if(ALU0_select_vld)
+            ALU0_PR_source2 <= ALU0_select_source2;
+    end
+
+    always @(posedge clk) begin     // ALU0_data_source1
+        if(ALU0_select_vld)begin
+            if(ALU0_select_source1 == ALU0_PR_bypass)
+                ALU0_data_source1 <= ALU0_data_bypass;
+            else if(ALU0_select_source1 == BRU_PR_bypass)
+                ALU0_data_source1 <= BRU_data_bypass;
+            else
+                ALU0_data_source1 <= regfile[ALU0_select_source1];
+        end
+    end
+
+    always @(posedge clk) begin     // ALU0_data_source2
+        if(ALU0_select_vld)begin
+            case (ALU0_select_op)
+                5'd0,5'd1,5'd2,5'd3,5'd4,5'd5,5'd6,5'd21,5'd22,5'd23: 
+                    ALU0_data_source2 <= {12'd0, ALU0_select_imm};
+                default: begin
+                    if(ALU0_select_source2 == ALU0_PR_bypass)
+                        ALU0_data_source2 <= ALU0_data_bypass;
+                    else if(ALU0_select_source2 == BRU_PR_bypass)
+                        ALU0_data_source2 <= BRU_data_bypass;
+                    else
+                        ALU0_data_source2 <= regfile[ALU0_select_source2];
+                end
+            endcase
+        end
     end
 
 endmodule
